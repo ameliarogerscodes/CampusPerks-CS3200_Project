@@ -17,5 +17,9 @@ with open("database-files/faker.sql", "w") as f:
             line += ",\n"
         else:
             line += ";\n"
+<<<<<<< HEAD
         f.write(line)
 
+=======
+        f.write(line)
+>>>>>>> 535be44 (added stores route)
