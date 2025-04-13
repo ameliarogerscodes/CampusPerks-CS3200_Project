@@ -98,6 +98,7 @@ CREATE TABLE user (
     FOREIGN KEY (clubId) REFERENCES club(clubId)
 );
 
+
 -- Admin table
 CREATE TABLE admin (
     username VARCHAR(50) PRIMARY KEY,
