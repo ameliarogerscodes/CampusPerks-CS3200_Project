@@ -34,3 +34,50 @@ def get_discounts():
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+
+
+@discounts.route('/discounts', methods=['POST'])
+def add_discount():
+    current_app.logger.info('POST /discounts route')
+
+
+    data = request.get_json()
+
+    required_fields = ['storeId', 'code', 'percentOff', 'item', 'startDate',
+                       'endDate', 'ageRestricted', 'minPurchase', 'bdayDiscount']
+
+
+    if not all(field in data for field in required_fields):
+        return make_response(jsonify({'error': 'Missing required fields'}), 400)
+
+    try:
+
+        query = '''
+            INSERT INTO discount (storeId, code, percentOff, item, startDate,
+                                  endDate, ageRestricted, minPurchase, bdayDiscount)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        '''
+        values = (
+            data['storeId'],
+            data['code'],
+            data['percentOff'],
+            data['item'],
+            data['startDate'],
+            data['endDate'],
+            data['ageRestricted'],
+            data['minPurchase'],
+            data['bdayDiscount']
+        )
+
+
+        conn = db.get_db()
+        cursor = conn.cursor()
+        cursor.execute(query, values)
+        conn.commit()
+
+        return make_response(jsonify({'message': 'Discount added successfully'}), 201)
+
+    except Exception as e:
+        current_app.logger.error(f"Error inserting discount: {e}")
+        return make_response(jsonify({'error': 'Failed to add discount'}), 500)
