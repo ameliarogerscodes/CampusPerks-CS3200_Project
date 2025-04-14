@@ -24,40 +24,34 @@ def predict_value(var01, var02):
 
 
 
-# Get all users from the DB
-@users.route('/users', methods=['GET'])
-def get_users():
-    current_app.logger.info(' GET /users route')
-    cursor = db.get_db().cursor()
-    cursor.execute('select username, firstName, lastName,\
-        password, college, email, phoneNo, birthdate, age, discountsUsed, clubId from customers')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-
-# Get customer detail for customer with particular userID
+# Get a single users information from the DB
 @users.route('/users/<username>', methods=['GET'])
 def get_user(username):
-    current_app.logger.info('GET /users/<username> route')
+    current_app.logger.info(' GET /users/<username> route')
     cursor = db.get_db().cursor()
-    cursor.execute('select username, firstName, lastName,\
-        password, college, email, phoneNo, birthdate, age, discountsUsed, clubId where id = {0}'.format(username))
+    query = ('''SELECT username, firstName, lastName, password, college, email,
+               phoneNo, birthdate, age, discountsUsed
+        FROM user
+        WHERE username = %s''')
+    cursor.execute(query, (username,))
     row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+    json_data = [dict(zip(row_headers, row)) for row in cursor.fetchall()]
+    return make_response(jsonify(json_data), 200)
+
+# get all users and their info 
+@users.route('/users', methods=['GET'])
+def get_all_users():
+    current_app.logger.info(' GET /users route')
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT username, firstName, lastName, password, college, email,
+               phoneNo, birthdate, age, discountsUsed
+        FROM user
+    '''
+    cursor.execute(query)
+    row_headers = [x[0] for x in cursor.description]
+    json_data = [dict(zip(row_headers, row)) for row in cursor.fetchall()]
+    return make_response(jsonify(json_data), 200)
 
 @users.route('/users', methods=['POST'])
 def add_new_user():
@@ -66,72 +60,61 @@ def add_new_user():
     the_data = request.json
     current_app.logger.info(the_data)
 
-    #extracting the variable
-    username = the_data['username']
-    firstName = the_data['firstName']
-    lastName = the_data['lastName']
-    password = the_data['password']
-    college = the_data['college']
-    email = the_data['email']
-    phoneNo = the_data['phoneNo']
-    birthdate = the_data['birthdate']
-    age = the_data['age']
-    discountsUsed = the_data['discountsUsed']
-    clubId = the_data['clubId']
-
-    # Constructing the query
-    query = 'insert into products (username, firstName, lastName, password, college, email, phoneNo, birthdate, age, disocuntsUsed, ' \
-    'clubId) values ("'
-    query += username + '", "'
-    query += firstName + '", "'
-    query += lastName + '", '
-    query += password + '", '
-    query += college + '", '
-    query += email + '", '
-    query += str(phoneNo) + '", '
-    query += birthdate + '", '
-    query += str(age) + '", '
-    query += str(discountsUsed) + '", '
-    query += str(clubId) + ')'
-    current_app.logger.info(query)
-
-    # executing and committing the insert statement 
+    query = '''
+        INSERT INTO user (username, firstName, lastName, password, college,
+                          email, phoneNo, birthdate, age, discountsUsed)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    '''
+    data = (
+        the_data['username'],
+        the_data['firstName'],
+        the_data['lastName'],
+        the_data['password'],
+        the_data['college'],
+        the_data['email'],
+        the_data['phoneNo'],
+        the_data['birthdate'],
+        the_data['age'],
+        the_data['discountsUsed']
+    )
     cursor = db.get_db().cursor()
-    cursor.execute(query)
+    cursor.execute(query, data)
     db.get_db().commit()
-    
-    return 'Success!'
+    return make_response("user added successfully", 201)
 
 @users.route('/users', methods=['PUT'])
 def update_user():
     current_app.logger.info('PUT /users route')
     user_info = request.json
-    # current_app.logger.info(cust_info)
-    username = user_info['username']
-    firstName = user_info['firstName']
-    lastName = user_info['lastName']
-    password = user_info['password']
-    college = user_info['college']
-    email = user_info['email']
-    phoneNo = user_info['phoneNo']
-    birthdate = user_info['birthdate']
-    age = user_info['age']
-    discountsUsed = user_info['disocuntsUsed']
-    clubId = user_info['clubId']
 
-    query = 'UPDATE users SET firstName = %s, lastName = %s, password = %s,' \
-    ' college = %s, email = %s, phoneNo = %s, birthdate = %s, age = %d, discountsUsed = %d,' \
-    ' clubId = %d where username = %s'
-    data = (firstName, lastName, password, college, email, phoneNo, birthdate, age, discountsUsed, clubId, username)
+    query = '''
+        UPDATE user
+        SET firstName = %s, lastName = %s, password = %s,
+            college = %s, email = %s, phoneNo = %s,
+            birthdate = %s, age = %s, discountsUsed = %s
+        WHERE username = %s
+    '''
+    data = (
+        user_info['firstName'],
+        user_info['lastName'],
+        user_info['password'],
+        user_info['college'],
+        user_info['email'],
+        user_info['phoneNo'],
+        user_info['birthdate'],
+        user_info['age'],
+        user_info['discountsUsed'],
+        user_info['username']
+    )
     cursor = db.get_db().cursor()
-    r = cursor.execute(query, data)
+    cursor.execute(query, data)
     db.get_db().commit()
-    return 'user updated!'
+    return "user updated successfully"
 
 # delete a user
 @users.route('/users/<username>', methods=['DELETE'])
 def delete_user(username):
-    current_app.logger.info('PUT /users/<username> route')
+    current_app.logger.info('DELETE /users/<username> route')
 
     query = '''DELETE FROM user WHERE username = %s'''
     cursor = db.get_db().cursor()
