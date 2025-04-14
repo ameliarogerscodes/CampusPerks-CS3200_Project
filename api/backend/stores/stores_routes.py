@@ -11,8 +11,10 @@ from backend.db_connection import db
 from backend.ml_models.model01 import predict
 
 stores = Blueprint('stores', __name__)
-(stores.route('/stores'))
+
+
 # get all stores
+@stores.route('/stores',methods=['GET'])
 def get_all_stores():
     cursor = db.get_db().cursor()
     the_query = '''
