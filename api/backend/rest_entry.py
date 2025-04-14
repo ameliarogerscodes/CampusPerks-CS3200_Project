@@ -105,7 +105,7 @@ def create_app():
     app.register_blueprint(users,       url_prefix='/u')
     app.register_blueprint(stores,      url_prefix='/s')
     app.register_blueprint(colleges,    url_prefix='/c')
-    app.register_blueprint(admin,      url_prefix='/a')
+    app.register_blueprint(admin,       url_prefix='/a')
     app.register_blueprint(discounts,   url_prefix='/d')
     app.register_blueprint(savedDiscounts,  url_prefix='/sd')
 
