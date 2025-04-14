@@ -72,3 +72,62 @@ def get_customer(userID):
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+# update a customer
+@customers.route('/customers', methods=['PUT'])
+def update_customer():
+    current_app.logger.info('PUT /customers route')
+    cust_info = request.json
+    cust_id = cust_info['id']
+    first = cust_info['first_name']
+    last = cust_info['last_name']
+    company = cust_info['company']
+
+    query = '''
+        UPDATE customers
+        SET first_name = %s, last_name = %s, company = %s
+        WHERE id = %s
+    '''
+    data = (first, last, company, cust_id)
+    cursor = db.get_db().cursor()
+    cursor.execute(query,data)
+    db.get_db().commit()
+    return 'customer updated successfully'
+
+# add a new customer
+@customers.route('/customers', methods=['POST'])
+def add_customer():
+    current_app.logger.info('POST /customers route')
+    the_data = request.json
+
+    company = the_data['company']
+    last = the_data['last_name']
+    first = the_data['first_name']
+    job = the_data['job_title']
+    phone = the_data['business_phone']
+
+    query = '''
+        INSERT INTO customers (company, last_name, first_name, job_title, business_phone)
+        VALUES (%s, %s, %s, %s, %s)
+    '''
+    data = (company, last, first, job, phone)
+    cursor = db.get_db().cursor()
+    cursor.execute(query,data)
+    db.get_db().commit()
+    response = make_response("Customer added successfully")
+    response.status_code = 201
+    return response
+
+# delete a customer
+@customers.route('/customers/<userID>', methods=['DELETE'])
+def delete_customer(userID):
+    current_app.logger.info('DELETE /customers/<userID> route')
+    query = '''
+        DELETE FROM customers WHERE id = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (userID, ))
+    db.get_db().commit()
+    response = make_response("Customer deleted successfully")
+    response.status_code = 200
+    return response
