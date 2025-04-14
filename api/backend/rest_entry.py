@@ -6,6 +6,13 @@ from flask import Flask
 from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
+from backend.users.users_routes import users
+from backend.stores.stores_routes import stores
+from backend.colleges.colleges_routes import colleges
+from backend.admin.admin_routes import admin
+from backend.discounts.discount_routes import discounts
+from backend.savedDiscounts.savedDiscounts_routes import savedDiscounts
+
 import os
 from dotenv import load_dotenv
 
@@ -93,10 +100,15 @@ def create_app():
 
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-    app.register_blueprint(customers,   url_prefix='/c')
-    app.register_blueprint(products,    url_prefix='/p')
+    app.register_blueprint(customers,   url_prefix='/customers')
+    app.register_blueprint(products,    url_prefix='/products')
+    app.register_blueprint(users,       url_prefix='/users')
+    app.register_blueprint(stores,      url_prefix='/stores')
+    app.register_blueprint(colleges,    url_prefix='/colleges')
+    app.register_blueprint(admin,      url_prefix='/admins')
+    app.register_blueprint(discounts,   url_prefix='/discounts')
+    app.register_blueprint(savedDiscounts,  url_prefix='/savedDiscounts')
 
-    app.register_blueprint(users,    url_prefix='/u')
 
     # Don't forget to return the app object
     return app
