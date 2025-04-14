@@ -38,6 +38,28 @@ def get_savedDiscounts(username):
     the_response.mimetype = 'application/json'
     return the_response
 
+# Get used/saved discounts page
+@savedDiscounts.route('/savedDiscounts/<username>', methods=['GET'])
+def get_used_discounts(username):
+    current_app.logger.info('GET /savedDiscounts/<username> route')
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT d.discountId, d.code, d.percentOff, d.item, d.startDate, d.endDate,
+               s.name AS storeName, s.category, s.priceRange
+        FROM discount_used du
+        JOIN discount d ON du.discountId = d.discountId
+        JOIN store s ON d.storeId = s.storeId
+        WHERE du.username = %s
+    '''
+    cursor.execute(query, (username,))
+    row_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+
 
 # Get customer detail for customer with particular userID
 @savedDiscounts.route('/savedDiscounts/<username>', methods=['GET'])
