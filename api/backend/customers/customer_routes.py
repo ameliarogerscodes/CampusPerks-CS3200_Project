@@ -55,14 +55,15 @@ def update_customer():
     cursor = db.get_db().cursor()
     r = cursor.execute(query, data)
     db.get_db().commit()
-    return 'customer updated!'
+    return 'customer updated successfully'
 
 # Get customer detail for customer with particular userID
 @customers.route('/customers/<userID>', methods=['GET'])
 def get_customer(userID):
     current_app.logger.info('GET /customers/<userID> route')
     cursor = db.get_db().cursor()
-    cursor.execute('select id, first_name, last_name from customers where id = {0}'.format(userID))
+    query = 'select id, first_name, last_name from customers where id = %s'
+    cursor.execute(query, (userID,))
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -73,26 +74,6 @@ def get_customer(userID):
     the_response.mimetype = 'application/json'
     return the_response
 
-# update a customer
-@customers.route('/customers', methods=['PUT'])
-def update_customer():
-    current_app.logger.info('PUT /customers route')
-    cust_info = request.json
-    cust_id = cust_info['id']
-    first = cust_info['first_name']
-    last = cust_info['last_name']
-    company = cust_info['company']
-
-    query = '''
-        UPDATE customers
-        SET first_name = %s, last_name = %s, company = %s
-        WHERE id = %s
-    '''
-    data = (first, last, company, cust_id)
-    cursor = db.get_db().cursor()
-    cursor.execute(query,data)
-    db.get_db().commit()
-    return 'customer updated successfully'
 
 # add a new customer
 @customers.route('/customers', methods=['POST'])
