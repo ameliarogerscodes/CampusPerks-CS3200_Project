@@ -36,7 +36,7 @@ def get_all_colleges():
 # get a specfic college, by id
 
 @colleges.route('/colleges/<int:collegeId>', methods=['GET'])
-def get_all_colleges(collegeId):
+def get_college(collegeId):
     current_app.logger.info('GET /colleges/<int:collegeId> route')
     cursor = db.get_db().cursor()
     query = '''
