@@ -54,6 +54,7 @@ def get_used_discounts(username):
     cursor.execute(query, (username,))
     row_headers = [x[0] for x in cursor.description]
     theData = cursor.fetchall()
+    json_data = [dict(zip(row_headers, row)) for row in theData]
     the_response = make_response(jsonify(json_data))
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
