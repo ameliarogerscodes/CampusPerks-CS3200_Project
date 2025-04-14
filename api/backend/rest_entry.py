@@ -6,6 +6,7 @@ from flask import Flask
 from backend.db_connection import db
 from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
+<<<<<<< HEAD
 from backend.users.users_routes import users
 from backend.stores.stores_routes import stores
 from backend.clubs.club_routes import clubs
@@ -14,6 +15,9 @@ from backend.admin.admin_routes import admin
 from backend.discounts.discount_routes import discounts
 from backend.savedDiscounts.savedDiscounts_routes import savedDiscounts
 
+=======
+from backend.employees.employee_routes import employees
+>>>>>>> parent of a5c7dcd (Merge branch 'main' of https://github.com/mvarrenti/CampusPerks-CS3200_Project)
 import os
 from dotenv import load_dotenv
 
@@ -103,6 +107,7 @@ def create_app():
     # and give a url prefix to each
     app.register_blueprint(customers,   url_prefix='/c')
     app.register_blueprint(products,    url_prefix='/p')
+<<<<<<< HEAD
     app.register_blueprint(users,       url_prefix='/u')
     app.register_blueprint(stores,      url_prefix='/s')
     app.register_blueprint(colleges,    url_prefix='/c')
@@ -110,6 +115,11 @@ def create_app():
     app.register_blueprint(discounts,   url_prefix='/d')
     app.register_blueprint(savedDiscounts,  url_prefix='/sd')
     app.register_blueprint(clubs,       url_prefix='/cl')
+=======
+    app.register_blueprint(employees,   url_prefix='/e')
+
+    app.register_blueprint(users,    url_prefix='/u')
+>>>>>>> parent of a5c7dcd (Merge branch 'main' of https://github.com/mvarrenti/CampusPerks-CS3200_Project)
 
     # Don't forget to return the app object
     return app
