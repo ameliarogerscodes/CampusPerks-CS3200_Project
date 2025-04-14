@@ -110,9 +110,7 @@ def update_college():
     domain = the_data['domain']
 
     query = '''
-        INSERT INTO college (name, locationStreet, locationCity, locationState, locationCountry,
-                             locationZipCode, noOfStores, noOfUsers, domain)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        UPDATE college SET ... WHERE collegeId = %s
     '''
     data = (collegeId, name, locationStreet, locationCity, locationState, locationCountry, locationZipCode, noOfStores, noOfUsers, domain)
     cursor = db.get_db().cursor()
