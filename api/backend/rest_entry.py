@@ -8,6 +8,7 @@ from backend.customers.customer_routes import customers
 from backend.products.products_routes import products
 from backend.users.users_routes import users
 from backend.stores.stores_routes import stores
+from backend.clubs.club_routes import clubs
 from backend.colleges.colleges_routes import colleges
 from backend.admin.admin_routes import admin
 from backend.discounts.discount_routes import discounts
@@ -108,7 +109,7 @@ def create_app():
     app.register_blueprint(admin,       url_prefix='/a')
     app.register_blueprint(discounts,   url_prefix='/d')
     app.register_blueprint(savedDiscounts,  url_prefix='/sd')
-
+    app.register_blueprint(clubs,       url_prefix='/cl')
 
     # Don't forget to return the app object
     return app
