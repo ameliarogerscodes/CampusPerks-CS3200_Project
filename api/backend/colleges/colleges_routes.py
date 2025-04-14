@@ -27,10 +27,13 @@ def get_all_colleges():
         FROM college
     '''
     cursor.execute(query)
+    row_headers = [x[0] for x in cursor.description]
     results = cursor.fetchall()
-    response = make_response(results)
+    json_data = []
+    for row in results:
+        json_data.append(dict(zip(row_headers, row)))
+    response = make_response(jsonify(json_data))
     response.status_code = 200
-    response.mimetype = 'application/json'
     return response
 
 # get a specfic college, by id
@@ -110,7 +113,17 @@ def update_college():
     domain = the_data['domain']
 
     query = '''
-        UPDATE college SET ... WHERE collegeId = %s
+        UPDATE college
+        SET name = %s,
+            locationStreet = %s,
+            locationCity = %s,
+            locationState = %s,
+            locationCountry = %s,
+            locationZipCode = %s,
+            noOfStores = %s,
+            noOfUsers = %s,
+            domain = %s
+        WHERE collegeId = %s
     '''
     data = (collegeId, name, locationStreet, locationCity, locationState, locationCountry, locationZipCode, noOfStores, noOfUsers, domain)
     cursor = db.get_db().cursor()
