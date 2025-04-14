@@ -40,10 +40,11 @@ def get_all_stores():
     '''
 
     cursor.execute(the_query)
+    row_headers = [x[0] for x in cursor.description]
     theData = cursor.fetchall()
-    the_response = make_response(theData)
+    json_data = [dict(zip(row_headers, row)) for row in theData]
+    the_response = make_response(jsonify(json_data))
     the_response.status_code = 200
-    the_response.mimetype='application/json'
     return the_response
 
 # get store details for a specifc store
@@ -71,11 +72,13 @@ def get_store_details(storeId):
             noOfOrders,
             college
         FROM stores
+        WHERE storeId = %s
     '''
 
-    cursor.execute(the_query)
+    cursor.execute(the_query, (storeId, ))
+    row_headers = [x[0] for x in cursor.description]
     theData = cursor.fetchall()
-    the_response = make_response(theData)
+    json_data = [dict(zip(row_headers, row)) for row in theData]
+    the_response = make_response(jsonify(json_data))
     the_response.status_code = 200
-    the_response.mimetype='application/json'
     return the_response
