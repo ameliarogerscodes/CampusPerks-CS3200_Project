@@ -24,11 +24,10 @@ def predict_value(var01, var02):
 
 
 
-
 # Get all users from the DB
 @users.route('/users', methods=['GET'])
 def get_users():
-    current_app.logger.info('users_routes.py: GET /users')
+    current_app.logger.info(' GET /users route')
     cursor = db.get_db().cursor()
     cursor.execute('select username, firstName, lastName,\
         password, college, email, phoneNo, birthdate, age, discountsUsed, clubId from customers')
@@ -128,3 +127,16 @@ def update_user():
     r = cursor.execute(query, data)
     db.get_db().commit()
     return 'user updated!'
+
+# delete a user
+@users.route('/users/<username>', methods=['DELETE'])
+def delete_user(username):
+    current_app.logger.info('PUT /users/<username> route')
+
+    query = '''DELETE FROM user WHERE username = %s'''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (username,))
+    db.get_db().commit()
+    response = make_response('user deleted succesfully')
+    response.status_code = 200
+    return response
