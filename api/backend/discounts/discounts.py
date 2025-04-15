@@ -1,7 +1,4 @@
-########################################################
-# Sample customers blueprint of endpoints
-# Remove this file if you are not using it in your project
-########################################################
+# Get all discounts from the DB
 
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
@@ -9,9 +6,7 @@ from backend.db_connection import db
 from backend.ml_models.model01 import predict
 
 
-discounts = Blueprint('discounts', __name__)
 
-# Get all discounts from the DB
 @discounts.route('/discounts', methods=['GET'])
 def get_discounts():
     current_app.logger.info('GET /discounts route')
