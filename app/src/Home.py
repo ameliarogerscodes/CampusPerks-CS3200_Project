@@ -58,7 +58,7 @@ if st.button("Act as Bharat, a Budget-Conscious Student",
     st.session_state['role'] = 'budget_student'
     st.session_state['first_name'] = 'Bharat'
     logger.info("Logging in as Budget-Conscious Student Persona")
-    st.switch_page('pages/02_Student_User_Home.py')
+    st.switch_page('pages/31_Student_User_Home.py')
 
 if st.button("Act as Glen, a Club Leader", 
              type='primary', 
