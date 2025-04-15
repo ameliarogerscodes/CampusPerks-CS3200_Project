@@ -49,7 +49,7 @@ if st.button("Act as Beth, a Local Business Owner",
     st.session_state['role'] = 'local_business_owner'
     st.session_state['first_name'] = 'Beth'
     logger.info("Logging in as Local Business Owner Persona")
-    st.switch_page('pages/01_Business_Owner_Home.py')
+    st.switch_page('pages/33_Business_Owner_Home.py')
 
 if st.button("Act as Bharat, a Budget-Conscious Student", 
              type='primary', 
