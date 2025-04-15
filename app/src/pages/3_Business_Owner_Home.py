@@ -10,23 +10,18 @@ SideBarLinks(show_home=True)
 st.title("Welcome, Beth! 👋")
 st.subheader("Your Business Dashboard")
 
-# --- Quick Actions ---
-st.markdown("### 📌 Quick Actions")
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.button("➕ Add New Discount")
-with col2:
-    st.button("✏️ Update Discount Terms")
-with col3:
-    st.button("🗑️ Deactivate Expired Discounts")
 # Feature navigation buttons
 st.markdown("### 🧰 Discount Tools")
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("➕ Add/Update Discounts"):
         st.switch_page("pages/31_Business_Manage_Discounts.py")
 with col2:
-    st.button("📈 View Analytics")
+    if st.button("🎓 View College Bookmarks"):
+        st.switch_page("pages/32_Business_College_Insights.py")
+with col3:
+    if st.button("🛑 Manage Active Discounts"):
+        st.switch_page("pages/33_Business_Manage_Active_Status.py")
 
 
 # --- Analytics Section ---
