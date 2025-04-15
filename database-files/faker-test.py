@@ -213,4 +213,27 @@ with open("database-files/faker.sql", "w") as f:
         else:
             line += ";\n"
         f.write(line)
+
+     # add admin
+    for i in range(1, admin_rows + 1):
+        f.write("INSERT INTO 'admin' ('username', 'firstName', 'lastName', 'password', 'email', 'phoneNo', " +
+                " 'supportUser', 'supportClub', 'supportStore')\nVALUES")
+        fn = fake.first_name().replace("'", "''")
+        ln = fake.last_name().replace("'", "''")
+        usern = fn.replace("''", "") + ln.replace("''", "") + str(random.randint(0, 200))
+        admin_users.append(usern)
+        pw = fake.password(length=8, special_chars=True, digits=True, upper_case=True, lower_case=True)
+        eml = usern.replace("''", "") + "@gmail.com"
+        phnn = fake.phone_number().replace("'", "''")
+        sUser = random.choice(all_usernames)
+        sClub = random.randint(1, club_rows)
+        sStore = random.randint(1, store_rows)
+        
+        line = f"('{usern}', '{fn}', '{ln}', '{pw}', '{eml}', '{phnn}', '{sUser}', {sClub}, {sStore})"
+        print(line)
+        if i < admin_rows:
+            line += ",\n"
+        else:
+            line += ";\n"
+        f.write(line)
     
