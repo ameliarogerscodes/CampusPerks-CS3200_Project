@@ -70,11 +70,11 @@ CREATE TABLE store (
 
 -- Discount table
 CREATE TABLE discount (
-    discountId INT AUTO_INCREMENT PRIMARY KEY,
+    discountId INT PRIMARY KEY NOT NULL,
     storeId INT NOT NULL,
     code VARCHAR(50) NOT NULL,
-    percentOff DECIMAL(5,2) NOT NULL,
-    item VARCHAR(100) NOT NULL,
+    percentOff INT NOT NULL,
+    item VARCHAR(100),
     startDate DATETIME NOT NULL,
     endDate DATETIME,
     ageRestricted BOOLEAN DEFAULT FALSE,
@@ -100,7 +100,6 @@ CREATE TABLE user (
     FOREIGN KEY (clubId) REFERENCES club(clubId)
 );
 
-
 -- Admin table
 CREATE TABLE admin (
     username VARCHAR(50) PRIMARY KEY,
@@ -109,7 +108,7 @@ CREATE TABLE admin (
     password VARCHAR(128) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     phoneNo VARCHAR(20) NOT NULL,
-    supportUser INT DEFAULT NULL,
+    supportUser VARCHAR(50) DEFAULT NULL,
     supportClub INT DEFAULT NULL,
     supportStore INT DEFAULT NULL,
     FOREIGN KEY (supportUser) REFERENCES user(username),
