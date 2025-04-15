@@ -48,6 +48,7 @@ eDates = ['2025-04-15', '2025-05-05', '2025-06-01', '2025-05-10']
 codes = ['BIGSALE', 'BUYBUYBUY', 'SALECODE', 'REDEEMCODE', 'SPRINGSALE']
 birthdates = ['2000-04-15', '2001-05-05', '2002-06-01', '2003-05-10', '1999-09-12', '2005-11-11']
 all_usernames = []
+admin_users = []
 
 fake = Faker()
 fake.add_provider(cities_provider)
@@ -67,6 +68,7 @@ store_rows = 5
 discount_rows = 10
 user_rows = 10
 saved_discount_rows = 10
+admin_rows = 2
 
 # path for project: "database-files/faker.sql"
 # personal path: "C:/Users/Emma/Documents/faker-stuff-output.sql"
