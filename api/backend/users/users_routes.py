@@ -24,7 +24,6 @@ def predict_value(var01, var02):
 
 
 
-<<<<<<< HEAD
 # Get a single users information from the DB
 @users.route('/users/<username>', methods=['GET'])
 def get_user(username):
@@ -124,40 +123,3 @@ def delete_user(username):
     response = make_response('user deleted succesfully')
     response.status_code = 200
     return response
-=======
-
-# Get all users from the DB
-@users.route('/users', methods=['GET'])
-def get_users():
-    current_app.logger.info('users_routes.py: GET /users')
-    cursor = db.get_db().cursor()
-    cursor.execute('select username, firstName, lastName,\
-        password, college, email, phoneNo, birthdate, age, discountsUsed, clubId from customers')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-
-# Get customer detail for customer with particular userID
-@users.route('/users/<userID>', methods=['GET'])
-def get_customer(userID):
-    current_app.logger.info('GET /users/<userID> route')
-    cursor = db.get_db().cursor()
-    cursor.execute('select username, firstName, lastName,\
-        password, college, email, phoneNo, birthdate, age, discountsUsed, clubId where id = {0}'.format(userID))
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
->>>>>>> 9966de2 (your commit message here)
