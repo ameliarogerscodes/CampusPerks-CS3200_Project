@@ -1,6 +1,7 @@
 # Idea borrowed from https://github.com/fsmosca/sample-streamlit-authenticator
 
 import streamlit as st
+import os
 
 #### ------------------------ General ------------------------
 def HomeNav():
