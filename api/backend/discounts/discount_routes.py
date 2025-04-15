@@ -106,8 +106,8 @@ def get_discount_by_id(discountId):
     return the_response
 
 # update a discount by ID
-@discounts.route('/discounts/<int: discountId>', methods=['PUT'])
-def get_discount_by_id(discountId):
+@discounts.route('/discounts/<int:discountId>', methods=['PUT'])
+def update_discount(discountId):
     current_app.logger.info('PUT /discounts/<discountId> route')
     data = request.get_json()
     query = '''
@@ -120,26 +120,26 @@ def get_discount_by_id(discountId):
         discountId
     )
     cursor = db.get_db().cursor()
-    cursor.exceute(query,values)
+    cursor.execute(query,values)
     db.get_db().commit()
-    return 'discount updated succesfully'
+    return 'discount updated successfully'
 
 # delete a discount by ID 
-@discounts.route('/discounts/<int: discountId>', methods=['DELETE'])
+@discounts.route('/discounts/<int:discountId>', methods=['DELETE'])
 def delete_discount(discountId):
     current_app.logger.info('DELETE /discounts/<discountId> route')
     query = '''
         DELETE FROM discount WHERE discountId = %s
     '''
     cursor = db.get_db().cursor()
-    cursor.exceute(query, (discountId,))
+    cursor.execute(query, (discountId,))
     db.get_db().commit()
-    return 'discount deleted succesfully'
+    return 'discount deleted successfully'
 
 # get list of discounts by category
-@discounts.route('/discounts/catagories', methods=['GET'])
-def get_discount_catagories():
-    current_app.logger.info('GET /discounts/catagories route')
+@discounts.route('/discounts/categories', methods=['GET'])
+def get_discount_categories():
+    current_app.logger.info('GET /discounts/categories route')
     cursor = db.get_db().cursor()
 
     query = '''
