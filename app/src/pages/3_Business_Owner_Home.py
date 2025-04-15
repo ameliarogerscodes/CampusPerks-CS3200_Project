@@ -19,6 +19,15 @@ with col2:
     st.button("✏️ Update Discount Terms")
 with col3:
     st.button("🗑️ Deactivate Expired Discounts")
+# Feature navigation buttons
+st.markdown("### 🧰 Discount Tools")
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("➕ Add/Update Discounts"):
+        st.switch_page("pages/31_Business_Manage_Discounts.py")
+with col2:
+    st.button("📈 View Analytics")
+
 
 # --- Analytics Section ---
 st.markdown("### 📊 Discount Performance")
