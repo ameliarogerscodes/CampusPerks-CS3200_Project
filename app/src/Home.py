@@ -49,7 +49,7 @@ if st.button("Act as Beth, a Local Business Owner",
     st.session_state['role'] = 'local_business_owner'
     st.session_state['first_name'] = 'Beth'
     logger.info("Logging in as Local Business Owner Persona")
-    st.switch_page('pages/33_Business_Owner_Home.py')
+    st.switch_page('pages/3_Business_Owner_Home.py')
 
 if st.button("Act as Bharat, a Budget-Conscious Student", 
              type='primary', 
@@ -58,7 +58,7 @@ if st.button("Act as Bharat, a Budget-Conscious Student",
     st.session_state['role'] = 'budget_student'
     st.session_state['first_name'] = 'Bharat'
     logger.info("Logging in as Budget-Conscious Student Persona")
-    st.switch_page('pages/31_Student_User_Home.py')
+    st.switch_page('pages/1_Student_User_Home.py')
 
 if st.button("Act as Glen, a Club Leader", 
              type='primary', 
@@ -67,7 +67,7 @@ if st.button("Act as Glen, a Club Leader",
     st.session_state['role'] = 'club_leader'
     st.session_state['first_name'] = 'Glen'
     logger.info("Logging in as Club Leader Persona")
-    st.switch_page('pages/03_Club_Leader_Home.py')
+    st.switch_page('pages/2_Club_Leader_Home.py')
 
 if st.button("Act as John, a System Administrator", 
              type='primary', 
@@ -76,5 +76,5 @@ if st.button("Act as John, a System Administrator",
     st.session_state['role'] = 'system_admin'
     st.session_state['first_name'] = 'John'
     logger.info("Logging in as System Administrator Persona")
-    st.switch_page('pages/04_System_Admin_Home.py')
+    st.switch_page('pages/4_Admin_Home.py')
 
