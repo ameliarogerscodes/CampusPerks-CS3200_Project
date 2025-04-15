@@ -31,7 +31,7 @@ def get_all_admins():
 
 # get specfic admin
 @admin.route('/admins/<username>', methods=['GET'])
-def get_all_admins(username):
+def get_admin(username):
     current_app.logger.info('GET /admins/<username> route')
     cursor = db.get_db().cursor()
     query = '''
