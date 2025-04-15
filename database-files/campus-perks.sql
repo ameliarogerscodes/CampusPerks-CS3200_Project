@@ -38,8 +38,10 @@ CREATE TABLE club (
     clubId INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     college VARCHAR(100) NOT NULL,
+    storeId INT DEFAULT NULL,
     numberOfUsers INT DEFAULT 0,
-    FOREIGN KEY (college) REFERENCES college(collegeName)
+    FOREIGN KEY (college) REFERENCES college(collegeName),
+    FOREIGN KEY (storeId) REFERENCES store(storeId)
 );
 
 -- Store table
@@ -59,9 +61,11 @@ CREATE TABLE store (
     totalSales DECIMAL(12,2) DEFAULT 0.00,
     noOfOrders INT DEFAULT 0,
     college VARCHAR(100) NOT NULL,
+    clubId INT DEFAULT NULL,
     FOREIGN KEY (college) REFERENCES college(collegeName),
-    FOREIGN KEY (locationId)
-        REFERENCES location(locationId)
+    FOREIGN KEY (locationId) REFERENCES location(locationId),
+    FOREIGN KEY (clubId) REFERENCES club(clubId)
+
 );
 
 -- Discount table
@@ -104,9 +108,12 @@ CREATE TABLE admin (
     password VARCHAR(128) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     phoneNo VARCHAR(20) NOT NULL,
-    supportUser BOOLEAN DEFAULT FALSE,
-    supportClub BOOLEAN DEFAULT FALSE,
-    supportStore BOOLEAN DEFAULT FALSE
+    supportUser INT DEFAULT NULL,
+    supportClub INT DEFAULT NULL,
+    supportStore INT DEFAULT NULL,
+    FOREIGN KEY (supportUser) REFERENCES user(username),
+    FOREIGN KEY (supportClub) REFERENCES club(clubId),
+    FOREIGN KEY (supportStore) REFERENCES store(storeId)
 );
 
 -- Junction tables
@@ -119,13 +126,7 @@ CREATE TABLE discount_used (
     FOREIGN KEY (discountId) REFERENCES discount(discountId)
 );
 
-CREATE TABLE club_store (
-    clubId INT NOT NULL,
-    storeId INT NOT NULL,
-    PRIMARY KEY (clubId, storeId),
-    FOREIGN KEY (clubId) REFERENCES club(clubId),
-    FOREIGN KEY (storeId) REFERENCES store(storeId)
-);
+
 
 -- Indexes
 CREATE INDEX idx_discount_store ON discount(storeId);
