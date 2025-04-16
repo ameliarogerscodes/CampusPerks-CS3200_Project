@@ -2,7 +2,7 @@ USE campusPerks_db;
 
 -- 1. Locations
 INSERT INTO location (streetAddress, city, state, country, zipCode) VALUES
-  ('199 High St',    'Chicago',       'New York',    'USA', '90210'),
+  ('199 High St',    'Chicago',       'Illinois',    'USA', '90210'),
   ('14 Baker St',    'Chicago',       'Illinois',    'USA', '11111'),
   ('14 Baker St',    'San Francisco', 'California',  'USA', '90210'),
   ('14 Baker St',    'New York',      'New York',    'USA', '11111'),
@@ -41,10 +41,10 @@ INSERT INTO store (
      'UCBerkeley.com', 1.0, TRUE,  FALSE, 14257.00, 132, 'UMiami'),
   ('Target',        '14 Baker St',    'Chicago',       'Illinois',    'USA',
      '$$$', 0, '12:00pm-9:00pm',  'grocery', '744.778.8272',
-     'UCBerkeley.com', 2.0, FALSE, TRUE,  938.00,   143, 'Northeastern'),
+     'UCBerkeley.com', 2.0, FALSE, TRUE,   938.00,   143, 'Northeastern'),
   ('Wollastons',    '14 Baker St',    'San Francisco', 'California',  'USA',
      '$', 0, '11:00am-11:00pm', 'convenience', '983-918-4580x57676',
-     'UCBerkeley.com', 2.0, FALSE, TRUE,  16196.00,   0, 'UCBerkeley');
+     'UCBerkeley.com', 2.0, FALSE, TRUE,  16196.00,     0, 'UCBerkeley');
 
 -- 5. Discounts
 INSERT INTO discount (
@@ -63,31 +63,30 @@ INSERT INTO discount (
   (5, 'REDEEMCODE',  39.00, 'books',     '2025-04-14', '2025-06-01', FALSE, 41.00, TRUE);
 
 -- 6. Users
-INSERT INTO user (
+INSERT INTO `user` (
     username, firstName, lastName, password, college, email,
     phoneNo, birthdate, age, discountsUsed
 ) VALUES
-  ('DarrellBryant59',    'Darrell', 'Bryant',  'j^1mLTFx', 'UMiami',      'DarrellBryant59@UMiami.edu',   '+1-668-274-0345x635',  '2003-05-10', 30, 5),
-  ('JoshuaGomez141',     'Joshua',  'Gomez',   '@85ZCnM^', 'Fordham',     'JoshuaGomez141@Fordham.edu',    '(332)499-6459',         '2001-05-05', 19, 5),
-  ('JeffreySims164',     'Jeffrey', 'Sims',    '#@!9B+Nc', 'Fordham',     'JeffreySims164@Fordham.edu',    '001-895-562-2539',      '2000-04-15', 25, 4),
-  ('TimothySweeney192',  'Timothy', 'Sweeney', 'Q3^0A$pK', 'Fordham',     'TimothySweeney192@Fordham.edu', '+1-647-717-9419x3044',  '2003-05-10', 23, 3),
-  ('AustinWarren83',     'Austin',  'Warren',  ')3ebGJb*', 'Fordham',     'AustinWarren83@Fordham.edu',    '001-829-448-7075x08446','2003-05-10', 29, 3),
-  ('JonathanYork86',     'Jonathan','York',    '@E*g9Eid', 'UCBerkeley', 'JonathanYork86@UCBerkeley.edu', '736.687.6018x49308',    '2000-04-15', 18, 2),
-  ('MichaelHensley123',  'Michael', 'Hensley', 'G&+R7Kj%', 'UMiami',      'MichaelHensley123@UMiami.edu',  '(628)850-9885x976',     '2002-06-01', 25, 3),
-  ('ErinMitchell118',    'Erin',    'Mitchell','4Z&R8Qze', 'UMiami',      'ErinMitchell118@UMiami.edu',    '001-317-967-1695x27664','2000-04-15', 19, 4),
-  ('JasonHolt143',       'Jason',   'Holt',    't&#@4hBy', 'UCBerkeley', 'JasonHolt143@UCBerkeley.edu',   '(839)861-2384',         '2002-06-01', 25, 3),
-  ('HannahNorris131',    'Hannah',  'Norris',  'v!5W*bCD', 'Fordham',     'HannahNorris131@Fordham.edu',    '788-746-9849x89793',    '2000-04-15', 29, 3);
+  ('DarrellBryant59',   'Darrell', 'Bryant',  'j^1mLTFx', 'UMiami',      'DarrellBryant59@UMiami.edu',   '+1-668-274-0345',   '2003-05-10', 30, 5),
+  ('JoshuaGomez141',    'Joshua',  'Gomez',   '@85ZCnM^', 'Fordham',     'JoshuaGomez141@Fordham.edu',    '(332)499-6459',     '2001-05-05', 19, 5),
+  ('JeffreySims164',    'Jeffrey', 'Sims',    '#@!9B+Nc', 'Fordham',     'JeffreySims164@Fordham.edu',    '001-895-562-2539',  '2000-04-15', 25, 4),
+  ('TimothySweeney192', 'Timothy', 'Sweeney', 'Q3^0A$pK', 'Fordham',     'TimothySweeney192@Fordham.edu', '+1-647-717-9419',   '2003-05-10', 23, 3),
+  ('AustinWarren83',    'Austin',  'Warren',  ')3ebGJb*', 'Fordham',     'AustinWarren83@Fordham.edu',    '001-829-448-7075',  '2003-05-10', 29, 3),
+  ('JonathanYork86',    'Jonathan','York',    '@E*g9Eid', 'UCBerkeley', 'JonathanYork86@UCBerkeley.edu','736.687.6018x49308','2000-04-15', 18, 2),
+  ('MichaelHensley123', 'Michael', 'Hensley', 'G&+R7Kj%', 'UMiami',      'MichaelHensley123@UMiami.edu',  '(628)850-9885',     '2002-06-01', 25, 3),
+  ('ErinMitchell118',   'Erin',    'Mitchell','4Z&R8Qze', 'UMiami',      'ErinMitchell118@UMiami.edu',    '001-317-967-1695',  '2000-04-15', 19, 4),
+  ('JasonHolt143',      'Jason',   'Holt',    't&#@4hBy', 'UCBerkeley', 'JasonHolt143@UCBerkeley.edu',   '(839)861-2384',     '2002-06-01', 25, 3),
+  ('HannahNorris131',   'Hannah',  'Norris',  'v!5W*bCD', 'Fordham',     'HannahNorris131@Fordham.edu',    '788-746-9849',      '2000-04-15', 29, 3);
 
 -- 7. Discount usage
 INSERT INTO discount_used (username, discountId) VALUES
-  ('JoshuaGomez141', 5),
-  ('JoshuaGomez141', 1),
-  ('HannahNorris131', 4),
+  ('JoshuaGomez141',    5),
+  ('JoshuaGomez141',    1),
+  ('HannahNorris131',   4),
   ('MichaelHensley123', 1),
-  ('ErinMitchell118', 3),
+  ('ErinMitchell118',   3),
   ('TimothySweeney192', 8),
-  ('DarrellBryant59', 9),
-  ('HannahNorris131', 4),
+  ('DarrellBryant59',   9),
   ('TimothySweeney192', 9),
   ('MichaelHensley123', 2);
 
@@ -96,5 +95,5 @@ INSERT INTO admin (
     username, firstName, lastName, password, email, phoneNo,
     supportUser, supportClub, supportStore
 ) VALUES
-  ('MichelleGreen177','Michelle','Green','iA)69QMj','MichelleGreen177@gmail.com','(766)968-0632x7115', TRUE, FALSE, FALSE),
-  ('DebbieLee17',    'Debbie',  'Lee',  'X*c9Q#x*', 'DebbieLee17@gmail.com',    TRUE, TRUE,  FALSE);
+  ('MichelleGreen177','Michelle','Green','iA)69QMj','MichelleGreen177@gmail.com','(766)968-0632', TRUE, FALSE, FALSE),
+  ('DebbieLee17',    'Debbie',  'Lee',  'X*c9Q#x*', 'DebbieLee17@gmail.com',    '(430)434-2285', TRUE, TRUE,  FALSE);

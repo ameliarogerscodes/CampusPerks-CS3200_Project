@@ -25,6 +25,7 @@ def get_all_admins():
     for row in results:
         json_data.append(dict(zip(row_headers, row)))
     response = make_response(jsonify(json_data))
+    response.mimetype = 'application/json'
     response.status_code = 200
     return response
 
@@ -47,6 +48,7 @@ def get_admin(username):
     for row in results:
         json_data.append(dict(zip(row_headers, row)))
     response = make_response(jsonify(json_data))
+    response.mimetype = 'application/json'
     response.status_code = 200
     return response
 
@@ -70,14 +72,17 @@ def add_admin():
         the_data['password'],
         the_data['email'],
         the_data['phoneNo'],
-        the_data('supportUser', False),
-        the_data('supportClub', False),
-        the_data('supportStore'), False
+        the_data.get('supportUser', False),
+        the_data.get('supportClub', False),
+        the_data.get('supportStore'), False
     )
 
     cursor.execute(query, data)
     db.get_db().commit()
-    return make_response('admin added succesfully', 201)
+    the_response = make_response(jsonify({'message': 'admin added successfully'}))
+    the_response.status_code = 201
+    the_response.mimetype = 'application/json'  # !! Added mimetype
+    return the_response
 
 # update admin
 @admin.route('/admins', methods=['PUT'])
@@ -105,7 +110,10 @@ def update_admin():
     cursor = db.get_db().cursor()
     cursor.execute(query, data)
     db.get_db().commit()
-    return make_response('admin added succesfully', 200)
+    the_response = make_response(jsonify({'message': 'admin updated successfully'}))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
 
 # delete admin 
 @admin.route('/admins/<username>', methods=['DELETE'])
@@ -115,6 +123,7 @@ def delete_admin(username):
     cursor = db.get_db().cursor()
     cursor.execute(query, (username, ))
     db.get_db().commit()
+    response.mimetype = 'application/json'
     response = make_response("college deleted successfully")
     response.status_code = 200
     return response

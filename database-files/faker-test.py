@@ -2,6 +2,7 @@ from faker import Faker
 from faker.providers import DynamicProvider
 import random
 
+
 cities_provider = DynamicProvider(
      provider_name="cities",
      elements=["Boston", "New York", "Chicago", "Miami", "San Francisco"],
