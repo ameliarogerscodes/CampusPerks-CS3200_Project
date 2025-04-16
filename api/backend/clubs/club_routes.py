@@ -61,7 +61,7 @@ def add_club():
 # update a club
 @clubs.route('/clubs/<int:clubId>', methods=['PUT'])
 def update_club(clubId):
-    current_app.logger.info('PUT /clubs<clubId> route')
+    current_app.logger.info('PUT /clubs<int:clubId> route')
     data = request.get_json()
     query = '''
         UPDATE club
@@ -77,19 +77,23 @@ def update_club(clubId):
     cursor = db.get_db().cursor()
     cursor.execute(query, values)
     db.get_db().commit()
+    if cursor.rowcount == 0:
+        return make_response("No club found to update", 404)
     return make_response("club updated successfully", 200)
 
 
 # delete a club
 @clubs.route('/clubs/<int:clubId>', methods=['DELETE'])
-def update_club(clubId):
-    current_app.logger.info('DELETE /clubs<clubId> route')
+def delete_club(clubId):
+    current_app.logger.info('DELETE /clubs<int:clubId> route')
     query = '''
         DELETE FROM club WHERE clubId = %s
     '''
     cursor = db.get_db().cursor()
     cursor.execute(query, (clubId, ))
     db.get_db().commit()
+    if cursor.rowcount == 0:
+        return make_response("no club found to delete", 404)
     return make_response("club deleted successfully", 200)
 
 # get all users in a club
@@ -135,6 +139,6 @@ def remove_user_from_club(clubId, username):
     cursor = db.get_db().cursor()
     cursor.execute(query, (clubId, username))
     db.get_db().commit()
-    return make_response("user removed from club successfully", 20)
+    return make_response("user removed from club successfully", 200)
 
 
