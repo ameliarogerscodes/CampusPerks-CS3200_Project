@@ -72,12 +72,13 @@ admin_rows = 2
 
 # path for project: "database-files/faker.sql"
 # personal path: "C:/Users/Emma/Documents/faker-stuff-output.sql"
-with open("database-files/faker.sql", "w") as f:
-    f.write("USE 'campusPerks_db'\n")
+with open("faker.sql", "w") as f:
+    print("✅ Writing to:", f.name)
+    f.write("USE campusPerks_db;\n")
 
     # add locations
     for i in range(1, location_rows + 1):
-        f.write("INSERT INTO 'location' ('locationId', 'streetAddress', 'city', 'state', 'country', 'zipcode')\nVALUES ")
+        f.write("INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)\nVALUES ")
         strAdd = fake.street_addresses().replace("'", "''")
         city = fake.cities().replace("'", "''")
         state = fake.states().replace("'", "''")
@@ -93,7 +94,7 @@ with open("database-files/faker.sql", "w") as f:
 
     # add colleges
     for i in range(1, college_rows + 1):
-        f.write("INSERT INTO 'college' ('collegeName', 'locationId', 'noOfStores', 'noOfUsers', 'domain')\nVALUES ")
+        f.write("INSERT INTO college (collegeName, locationId, noOfStores, noOfUsers, domain)\nVALUES ")
         cn = random.choice(colleges1)
         colleges1.remove(cn)
         lId = random.randint(1, location_rows)
@@ -111,16 +112,16 @@ with open("database-files/faker.sql", "w") as f:
         
     # add stores
     for i in range(1, store_rows + 1):
-        f.write("INSERT INTO 'store' ('storeId', 'name', 'locationId', 'priceRange', 'noOfDiscounts'," +
-                "'hoursOfOperations', 'category', 'phoneNo', 'website', 'starRating', 'delivery', 'ageRestricted'," +
-                " 'totalSales', 'noOfOrders', 'college', 'clubId')\nVALUES ")
+        f.write("INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts," +
+                "hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted," +
+                "totalSales, noOfOrders, college, clubId)\nVALUES ")
         name = fake.stores().replace("'", "''")
         lId2 = random.randint(1, location_rows)
         pr = random.choice(price_ranges)
         ho = random.choice(hours)
         cat = random.choice(categories)
         phone = fake.phone_number().replace("'", "''")
-        web = cn.replace("''", "") + ".com"
+        web = fake.domain_name()
         rate = random.randint(1, 5)
         de = random.randint(0, 1)
         ar = random.randint(0, 1)
@@ -139,7 +140,7 @@ with open("database-files/faker.sql", "w") as f:
         
     # add clubs
     for i in range(1, club_rows + 1):
-        f.write("INSERT INTO 'club' ('clubId', 'name', 'college', 'storeId', 'numberOfUsers')\nVALUES ")
+        f.write("INSERT INTO club (clubId, name, college, storeId, numberOfUsers)\nVALUES ")
         name = fake.clubs().replace("'", "''")
         college = random.choice(colleges2)
         colleges2.remove(college)
@@ -155,8 +156,8 @@ with open("database-files/faker.sql", "w") as f:
     
     # add discounts
     for i in range(1, discount_rows + 1):
-        f.write("INSERT INTO 'discount' ('discountId', 'storeId', 'code', 'percentOff', 'item', 'startDate'," + 
-                " 'endDate', 'ageRestricted', 'minPurchase', 'bdayDiscount')\nVALUES ")
+        f.write("INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate," + 
+                " endDate, ageRestricted, minPurchase, bdayDiscount)\nVALUES ")
         stId = random.randint(1, store_rows)
         code = random.choice(codes)
         pOff = random.randint(1, 99)
@@ -179,8 +180,8 @@ with open("database-files/faker.sql", "w") as f:
     
     # add users 
     for i in range(1, user_rows + 1):
-        f.write("INSERT INTO 'users' ('username', 'firstName', 'lastName', 'password', 'college', 'email', 'phoneNo', 'birthdate', " +
-                " 'age', 'discountsUsed', 'clubId') VALUES ")
+        f.write("INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate, " +
+                " age, discountsUsed, clubId) VALUES ")
         firstName = fake.first_name().replace("'", "''")
         lastName = fake.last_name().replace("'", "''")
         username = firstName.replace("''", "") + lastName.replace("''", "") + str(random.randint(0, 200))
@@ -204,7 +205,7 @@ with open("database-files/faker.sql", "w") as f:
 
     # add saved discounts
     for i in range(1, saved_discount_rows + 1):
-        f.write("INSERT INTO 'discount_used' ('username', 'discountId')\nVALUES ")
+        f.write("INSERT INTO discount_used (username, discountId)\nVALUES ")
         us = random.choice(all_usernames)
         disId = random.randint(1, discount_rows)
         
@@ -218,8 +219,8 @@ with open("database-files/faker.sql", "w") as f:
 
      # add admin
     for i in range(1, admin_rows + 1):
-        f.write("INSERT INTO 'admin' ('username', 'firstName', 'lastName', 'password', 'email', 'phoneNo', " +
-                " 'supportUser', 'supportClub', 'supportStore')\nVALUES")
+        f.write("INSERT INTO admin (username, firstName, lastName, password, email, phoneNo, " +
+                " supportUser, supportClub, supportStore)\nVALUES")
         fn = fake.first_name().replace("'", "''")
         ln = fake.last_name().replace("'", "''")
         usern = fn.replace("''", "") + ln.replace("''", "") + str(random.randint(0, 200))

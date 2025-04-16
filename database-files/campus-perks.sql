@@ -3,17 +3,15 @@ CREATE DATABASE campusPerks_db;
 USE campusPerks_db;
 
 DROP TABLE IF EXISTS discount_used;
-DROP TABLE IF EXISTS user_club;
-DROP TABLE IF EXISTS club_store;
-DROP TABLE IF EXISTS discount;
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS store;
+DROP TABLE IF EXISTS discount;
 DROP TABLE IF EXISTS club;
+DROP TABLE IF EXISTS store;
 DROP TABLE IF EXISTS college;
 DROP TABLE IF EXISTS location;
 
--- Location table
+-- 1. Location table
 CREATE TABLE location (
     locationId INT PRIMARY KEY,
     streetAddress VARCHAR(100) NOT NULL,
@@ -23,7 +21,7 @@ CREATE TABLE location (
     zipCode VARCHAR(20) NOT NULL
 );
 
--- College table
+-- 2. College table
 CREATE TABLE college (
     collegeName VARCHAR(100) PRIMARY KEY,
     locationId INT NOT NULL,
@@ -33,18 +31,7 @@ CREATE TABLE college (
     FOREIGN KEY(locationId) REFERENCES location(locationId)
 );
 
--- Club table
-CREATE TABLE club (
-    clubId INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    college VARCHAR(100) NOT NULL,
-    storeId INT DEFAULT NULL,
-    numberOfUsers INT DEFAULT 0,
-    FOREIGN KEY (college) REFERENCES college(collegeName),
-    FOREIGN KEY (storeId) REFERENCES store(storeId)
-);
-
--- Store table
+-- 3. Store table
 CREATE TABLE store (
     storeId INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -63,12 +50,21 @@ CREATE TABLE store (
     college VARCHAR(100) NOT NULL,
     clubId INT DEFAULT NULL,
     FOREIGN KEY (college) REFERENCES college(collegeName),
-    FOREIGN KEY (locationId) REFERENCES location(locationId),
-    FOREIGN KEY (clubId) REFERENCES club(clubId)
-
+    FOREIGN KEY (locationId) REFERENCES location(locationId)
 );
 
--- Discount table
+-- 4. Club table
+CREATE TABLE club (
+    clubId INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    college VARCHAR(100) NOT NULL,
+    storeId INT DEFAULT NULL,
+    numberOfUsers INT DEFAULT 0,
+    FOREIGN KEY (college) REFERENCES college(collegeName),
+    FOREIGN KEY (storeId) REFERENCES store(storeId)
+);
+
+-- 5. Discount table
 CREATE TABLE discount (
     discountId INT PRIMARY KEY NOT NULL,
     storeId INT NOT NULL,
@@ -83,7 +79,7 @@ CREATE TABLE discount (
     FOREIGN KEY (storeId) REFERENCES store(storeId)
 );
 
--- User table (updated to reference clubId)
+-- 6. User table
 CREATE TABLE user (
     username VARCHAR(50) PRIMARY KEY,
     firstName VARCHAR(50) NOT NULL,
@@ -100,7 +96,7 @@ CREATE TABLE user (
     FOREIGN KEY (clubId) REFERENCES club(clubId)
 );
 
--- Admin table
+-- 7. Admin table
 CREATE TABLE admin (
     username VARCHAR(50) PRIMARY KEY,
     firstName VARCHAR(50) NOT NULL,
@@ -116,8 +112,7 @@ CREATE TABLE admin (
     FOREIGN KEY (supportStore) REFERENCES store(storeId)
 );
 
--- Junction tables
-
+-- 8. Discount Used (junction table)
 CREATE TABLE discount_used (
     username VARCHAR(50) NOT NULL,
     discountId INT NOT NULL,
@@ -125,8 +120,6 @@ CREATE TABLE discount_used (
     FOREIGN KEY (username) REFERENCES user(username),
     FOREIGN KEY (discountId) REFERENCES discount(discountId)
 );
-
-
 
 -- Indexes
 CREATE INDEX idx_discount_store ON discount(storeId);
