@@ -27,7 +27,7 @@ def predict_value(var01, var02):
 # Get a single users information from the DB
 @users.route('/users/<username>', methods=['GET'])
 def get_user(username):
-    current_app.logger.info('GET /users/<username> route')
+    current_app.logger.info(' GET /users/<username> route')
     cursor = db.get_db().cursor()
     query = ('''SELECT username, firstName, lastName, password, college, email,
                phoneNo, birthdate, age, discountsUsed
