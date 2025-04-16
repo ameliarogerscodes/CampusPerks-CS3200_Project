@@ -22,99 +22,9 @@ def predict_value(var01, var02):
     the_response.mimetype = 'application/json'
     return the_response
 
-# get all saved discounts
-@savedDiscounts.route('/savedDiscounts', methods=['GET'])
-def get_savedDiscounts(username):
-    current_app.logger.info('savedDiscounts_routes.py: GET /savedDiscounts')
-    cursor = db.get_db().cursor()
-    cursor.execute('select username, discountId from discount_used')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-# Get used/saved discounts page by user 
-@savedDiscounts.route('/savedDiscounts/<username>', methods=['GET'])
-def get_used_discounts(username):
-    current_app.logger.info('GET /savedDiscounts/<username> route')
-    cursor = db.get_db().cursor()
-    query = '''
-        SELECT d.discountId, d.code, d.percentOff, d.item, d.startDate, d.endDate,
-               s.name AS storeName, s.category, s.priceRange
-        FROM discount_used du
-        JOIN discount d ON du.discountId = d.discountId
-        JOIN store s ON d.storeId = s.storeId
-        WHERE du.username = %s
-    '''
-    cursor.execute(query, (username,))
-    row_headers = [x[0] for x in cursor.description]
-    theData = cursor.fetchall()
-    json_data = [dict(zip(row_headers, row)) for row in theData]
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-
-# Get customer detail by userID
-@savedDiscounts.route('/savedDiscounts/<username>', methods=['GET'])
-def get_savedDiscounts_user(username):
-    current_app.logger.info('GET /savedDiscounts/<username> route')
-    cursor = db.get_db().cursor()
-    cursor.execute('select username, discountId from discount_used where where username = {0}'.format(username))
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-
-# save new discounts for a user
-@savedDiscounts.route('/savedDiscounts/<username>', methods=['POST'])
-def add_used_discounts():
-    current_app.logger.info('POST /savedDiscounts/<username> route')
-    the_data = request.json
-    username = the_data['username']
-    discountId = the_data['discountId']
-    query = '''
-        INSERT INTO discount_used (username, discountId)
-        VALUES ('{username}', {discountId})
-    '''
-    cursor.execute(query, (username,))
-    row_headers = [x[0] for x in cursor.description]
-    theData = cursor.fetchall()
-    json_data = [dict(zip(row_headers, row)) for row in theData]
-    the_response = make_response(jsonify('saved discount added'))
-    the_response.status_code = 201
-    return the_response
-
-# remove a saved discount
-@savedDiscounts.route('/savedDiscounts/<username>/int:disountId', methods=['DELETE'])
-def delete_saved_discounts(username, discountId):
-    current_app.logger.info('DELETE /savedDiscounts/<username>/<discountId> route')
-    query = '''
-        DELETE FROM discount_used
-        WHERE username = %s AND discountId = %s
-    '''
-    cursor = db.get_db().cursor()
-    cursor.execute(query, (username, discountId))
-    db.get_db().commit()
-    the_response = make_response(jsonify('saved discount deleted'))
-    the_response.status_code = 200
-    return the_response
-
 # get most popular discounts 
 @savedDiscounts.route('/savedDiscounts/popular', methods=['GET'])
-def get_savedDiscounts_user(username):
+def get_savedDiscounts_pop():
     current_app.logger.info('GET /savedDiscounts/popular route')
     query = '''
         SELECT discountId, COUNT(*) AS saves
@@ -158,3 +68,75 @@ def get_saved_by_catgeory():
     the_response.status_code = 200
     the_response.mimetype = 'application/json'
     return the_response
+
+# get all saved discounts
+@savedDiscounts.route('/savedDiscounts', methods=['GET'])
+def get_savedDiscounts():
+    current_app.logger.info('GET /savedDiscounts')
+    cursor = db.get_db().cursor()
+    cursor.execute('SELECT username, discountId FROM discount_used')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+# get saved discounts for one user, including store info
+@savedDiscounts.route('/savedDiscounts/<username>', methods=['GET'])
+def get_used_discounts(username):
+    current_app.logger.info('GET /savedDiscounts/<username> route')
+    cursor = db.get_db().cursor()
+    query = '''
+        SELECT d.discountId, d.code, d.percentOff, d.item, d.startDate, d.endDate,
+               s.name AS storeName, s.category, s.priceRange
+        FROM discount_used du
+        JOIN discount d ON du.discountId = d.discountId
+        JOIN store s ON d.storeId = s.storeId
+        WHERE du.username = %s
+    '''
+    cursor.execute(query, (username,))
+    row_headers = [x[0] for x in cursor.description]
+    theData = cursor.fetchall()
+    json_data = [dict(zip(row_headers, row)) for row in theData]
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
+
+# save new discounts for a user
+@savedDiscounts.route('/savedDiscounts', methods=['POST'])
+def add_saved_discounts():
+    current_app.logger.info('POST /savedDiscounts route')
+    data = request.get_json()
+    query = 'INSERT INTO discount_used (username, discountId) VALUES (%s, %s)'  # !! parameterized
+    cursor = db.get_db().cursor()                                                 # !!
+    cursor.execute(query, (data['username'], data['discountId']))                 # !!
+    db.get_db().commit()                                                          # !!
+
+    the_response = make_response(jsonify({'message': 'saved discount added'}))    # !!
+    the_response.status_code = 201                                               # !!
+    the_response.mimetype = 'application/json'                                     # !!
+    return the_response 
+
+# remove a saved discount
+@savedDiscounts.route('/savedDiscounts/<username>/<int:discountId>', methods=['DELETE'])
+def delete_saved_discounts(username, discountId):
+    current_app.logger.info('DELETE /savedDiscounts/<username>/<discountId> route')
+    query = '''
+        DELETE FROM discount_used
+        WHERE username = %s AND discountId = %s
+    '''
+    cursor = db.get_db().cursor()
+    cursor.execute(query, (username, discountId))
+    db.get_db().commit()
+    the_response = make_response(jsonify('saved discount deleted'))
+    the_response.mimetype = 'application/json'
+    the_response.status_code = 200
+    return the_response
+
+
