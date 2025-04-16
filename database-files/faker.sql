@@ -1,95 +1,69 @@
 USE campusPerks_db;
 INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)
-VALUES (1, '199 High St', 'Miami', 'Florida', 'USA', '02110'),
-INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)
-VALUES (2, '458 Huntington Ave', 'Miami', 'New York', 'USA', '77777'),
-INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)
-VALUES (3, '458 Huntington Ave', 'Chicago', 'New York', 'USA', '02110'),
-INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)
-VALUES (4, '15 Fruit St', 'Boston', 'Massachusetts', 'USA', '90210'),
-INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)
-VALUES (5, '458 Huntington Ave', 'San Francisco', 'Florida', 'USA', '11111');
+VALUES
+(1, '15 Fruit St', 'San Francisco', 'Massachusetts', 'USA', '02110'),
+(2, '15 Fruit St', 'San Francisco', 'Illinois', 'USA', '02110'),
+(3, '15 Fruit St', 'New York', 'New York', 'USA', '11111'),
+(4, '12 Summit Pl', 'Miami', 'California', 'USA', '77777'),
+(5, '15 Fruit St', 'Boston', 'California', 'USA', '01950');
 INSERT INTO college (collegeName, locationId, noOfStores, noOfUsers, domain)
-VALUES ('UCBerkeley', 3, 0, 0, '@UCBerkeley.edu'),
-INSERT INTO college (collegeName, locationId, noOfStores, noOfUsers, domain)
-VALUES ('Northeastern', 5, 0, 0, '@Northeastern.edu'),
-INSERT INTO college (collegeName, locationId, noOfStores, noOfUsers, domain)
-VALUES ('Northwestern', 2, 0, 0, '@Northwestern.edu'),
-INSERT INTO college (collegeName, locationId, noOfStores, noOfUsers, domain)
-VALUES ('UMiami', 5, 0, 0, '@UMiami.edu'),
-INSERT INTO college (collegeName, locationId, noOfStores, noOfUsers, domain)
-VALUES ('Fordham', 4, 0, 0, '@Fordham.edu');
-INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts,hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted,totalSales, noOfOrders, college, clubId)
-VALUES (1, 'Aroma Joes', 1, '$$', 0, '11:00am-11:00pm', 'convenience', '+1-604-386-1763x6272', 'williams.org', 3, 1, 1, 7289, 106, 'Fordham', NULL),
-INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts,hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted,totalSales, noOfOrders, college, clubId)
-VALUES (2, 'Star Market', 3, '$', 0, '10:00am-5:00pm', 'grocery', '958-733-5154x55061', 'lee.info', 5, 1, 1, 5122, 150, 'UMiami', NULL),
-INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts,hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted,totalSales, noOfOrders, college, clubId)
-VALUES (3, 'Target', 3, '$', 0, '7:00am-12:00am', 'clothing', '+1-886-690-2346', 'gutierrez-jones.com', 4, 1, 1, 8006, 146, 'UCBerkeley', NULL),
-INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts,hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted,totalSales, noOfOrders, college, clubId)
-VALUES (4, 'Target', 4, '$', 0, '7:00am-12:00am', 'clothing', '+1-792-924-2440x97391', 'wagner.com', 4, 1, 0, 9315, 318, 'Northwestern', NULL),
-INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts,hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted,totalSales, noOfOrders, college, clubId)
-VALUES (5, 'Panera', 4, '$$', 0, '12:00pm-9:00pm', 'convenience', '(370)217-8988x052', 'butler.com', 1, 0, 1, 16473, 312, 'Northwestern', NULL);
+VALUES
+('Northwestern', 4, 0, 0, '@Northwestern.edu'),
+('Northeastern', 5, 0, 0, '@Northeastern.edu'),
+('UCBerkeley', 3, 0, 0, '@UCBerkeley.edu'),
+('Fordham', 1, 0, 0, '@Fordham.edu'),
+('UMiami', 1, 0, 0, '@UMiami.edu');
+INSERT INTO store (storeId, name, locationId, priceRange, noOfDiscounts, hoursOfOperations, category, phoneNo, website, starRating, delivery, ageRestricted, totalSales, noOfOrders, college, clubId)
+VALUES
+(1, 'Wollastons', 5, '$$$', 0, '10:00am-5:00pm', 'clothing', '882.664.0395', 'parker.biz', 1, 0, 0, 13277, 47, 'UCBerkeley', NULL),
+(2, 'Aroma Joes', 1, '$$$', 0, '11:00am-11:00pm', 'convenience', '8047451749', 'alexander-alvarez.info', 1, 0, 0, 3207, 81, 'UMiami', NULL),
+(3, 'Star Market', 2, '$', 0, '10:00am-5:00pm', 'grocery', '+1-583-771-3698', 'sandoval-anderson.com', 3, 1, 0, 5003, 248, 'Northeastern', NULL),
+(4, 'Panera', 5, '$$', 0, '12:00pm-9:00pm', 'grocery', '001-234-255-9391x3831', 'taylor-bailey.com', 4, 1, 1, 18902, 444, 'UMiami', NULL),
+(5, 'Wollastons', 2, '$$$', 0, '7:00am-12:00am', 'clothing', '412-860-3707x648', 'perez.com', 4, 0, 0, 18453, 219, 'Northeastern', NULL);
 INSERT INTO club (clubId, name, college, storeId, numberOfUsers)
-VALUES (1, 'Trivia Club', 'UCBerkeley', NULL, 0),
-INSERT INTO club (clubId, name, college, storeId, numberOfUsers)
-VALUES (2, 'Badminton Club', 'UMiami', NULL, 0),
-INSERT INTO club (clubId, name, college, storeId, numberOfUsers)
-VALUES (3, 'Badminton Club', 'Northeastern', NULL, 0),
-INSERT INTO club (clubId, name, college, storeId, numberOfUsers)
-VALUES (4, 'Society of Women in Tech', 'Northwestern', NULL, 0),
-INSERT INTO club (clubId, name, college, storeId, numberOfUsers)
-VALUES (5, 'Film Club', 'Fordham', NULL, 0);
+VALUES
+(1, 'Film Club', 'UCBerkeley', NULL, 0),
+(2, 'Badminton Club', 'Northeastern', NULL, 0),
+(3, 'Society of Women in Tech', 'Fordham', NULL, 0),
+(4, 'Trivia Club', 'UMiami', NULL, 0),
+(5, 'Phi Delta Theta', 'Northwestern', NULL, 0);
 INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (1, 4, 'REDEEMCODE', 1, 'furniature', '2025-04-14', '2025-06-01', 1, 89, 0),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (2, 1, 'BUYBUYBUY', 64, 'clothing', '2025-02-18', '2025-06-01', 0, 10, 1),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (3, 1, 'BUYBUYBUY', 81, 'produce', '2025-02-18', '2025-05-05', 1, 9, 0),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (4, 1, 'BUYBUYBUY', 32, 'coffee', '2025-02-18', '2025-06-01', 0, 28, 1),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (5, 4, 'REDEEMCODE', 38, 'furniature', '2025-04-14', '2025-05-05', 0, 94, 0),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (6, 4, 'SPRINGSALE', 23, 'books', '2025-02-18', '2025-06-01', 0, 39, 1),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (7, 5, 'BIGSALE', 93, 'produce', '2025-03-20', '2025-05-10', 1, 58, 1),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (8, 4, 'SPRINGSALE', 58, 'clothing', '2025-02-18', '2025-05-05', 1, 74, 1),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (9, 5, 'BUYBUYBUY', 74, 'clothing', '2025-04-14', '2025-06-01', 1, 12, 1),
-INSERT INTO discount (discountId, storeId, code, percentOff, item, startDate, endDate, ageRestricted, minPurchase, bdayDiscount)
-VALUES (10, 3, 'BIGSALE', 33, 'produce', '2025-03-30', '2025-05-05', 0, 52, 1);
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('MarkMorris26', 'Mark', 'Morris', '%W6a6(Jt', 'UMiami', 'MarkMorris26@UMiami.edu', '+1-634-239-1219', '2000-04-15', 25, 4),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('JeremiahDavis164', 'Jeremiah', 'Davis', '*7)OOr!8', 'Northeastern', 'JeremiahDavis164@Northeastern.edu', '001-285-733-2132', '2003-05-10', 21, 3),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('MadelineWeber92', 'Madeline', 'Weber', 'r%1ddfOt', 'Northwestern', 'MadelineWeber92@Northwestern.edu', '+1-915-343-8905x01750', '2002-06-01', 26, 2),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('CoreyReyes197', 'Corey', 'Reyes', '8$n2WtTf', 'UMiami', 'CoreyReyes197@UMiami.edu', '727-577-3140x14463', '2003-05-10', 25, 3),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('AbigailStanton186', 'Abigail', 'Stanton', '0F_4yEQv', 'UMiami', 'AbigailStanton186@UMiami.edu', '371-940-0129', '2002-06-01', 30, 3),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('TammyAnderson146', 'Tammy', 'Anderson', '^d8A!aFf', 'Northwestern', 'TammyAnderson146@Northwestern.edu', '251-841-2029', '2005-11-11', 24, 5),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('JackZamora155', 'Jack', 'Zamora', '^h01XeyF', 'UMiami', 'JackZamora155@UMiami.edu', '+1-647-435-6716x66361', '2000-04-15', 30, 5),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('TamaraMoore103', 'Tamara', 'Moore', '$Mm5I8x6', 'Northeastern', 'TamaraMoore103@Northeastern.edu', '+1-446-876-7561', '2000-04-15', 24, 3),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('MichelleYoung20', 'Michelle', 'Young', '(&*1D*ps', 'Northeastern', 'MichelleYoung20@Northeastern.edu', '200.284.3989', '2003-05-10', 30, 3),
-INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate,  age, discountsUsed, clubId) VALUES ('MicheleKelly94', 'Michele', 'Kelly', '$m0Mo4FF', 'Northwestern', 'MicheleKelly94@Northwestern.edu', '(308)443-3158', '2002-06-01', 20, 5);
+VALUES
+(1, 4, 'REDEEMCODE', 87, 'produce', '2025-04-14', '2025-04-15', 1, 94, 0),
+(2, 4, 'SPRINGSALE', 8, 'books', '2025-03-20', '2025-05-05', 1, 13, 0),
+(3, 4, 'SALECODE', 32, 'books', '2025-03-30', '2025-05-10', 0, 65, 0),
+(4, 3, 'REDEEMCODE', 22, 'coffee', '2025-03-30', '2025-06-01', 1, 84, 1),
+(5, 5, 'REDEEMCODE', 88, 'produce', '2025-04-14', '2025-05-05', 1, 23, 1),
+(6, 1, 'SPRINGSALE', 22, 'books', '2025-04-14', '2025-04-15', 1, 34, 0),
+(7, 3, 'SALECODE', 27, 'furniature', '2025-03-30', '2025-05-10', 0, 50, 1),
+(8, 1, 'REDEEMCODE', 10, 'coffee', '2025-02-18', '2025-04-15', 0, 50, 0),
+(9, 1, 'BUYBUYBUY', 25, 'clothing', '2025-04-14', '2025-05-05', 1, 21, 1),
+(10, 5, 'BUYBUYBUY', 43, 'books', '2025-02-18', '2025-05-05', 1, 28, 1);
+INSERT INTO user (username, firstName, lastName, password, college, email, phoneNo, birthdate, age, discountsUsed, clubId)
+VALUES
+('MeaganGay64', 'Meagan', 'Gay', '&3Nsh((l', 'UCBerkeley', 'MeaganGay64@UCBerkeley.edu', '616-542-6069', '1999-09-12', 23, 0, 5),
+('KarenWalker95', 'Karen', 'Walker', 'PV+Qi7Bs', 'Fordham', 'KarenWalker95@Fordham.edu', '462-220-1324x2396', '1999-09-12', 21, 0, 3),
+('KellyRobles135', 'Kelly', 'Robles', '_6Iv$Q6P', 'UMiami', 'KellyRobles135@UMiami.edu', '001-631-760-2178x0850', '2002-06-01', 19, 1, 4),
+('ArielAyala34', 'Ariel', 'Ayala', 'Tg__4zBm', 'UMiami', 'ArielAyala34@UMiami.edu', '+1-994-640-8526x686', '2003-05-10', 30, 4, 2),
+('PaulJohnson36', 'Paul', 'Johnson', 'N@U3Yuz)', 'UMiami', 'PaulJohnson36@UMiami.edu', '767-240-1769x5113', '2005-11-11', 19, 0, 2),
+('LoganJones71', 'Logan', 'Jones', '*V0XeRCf', 'Northwestern', 'LoganJones71@Northwestern.edu', '382-746-8596', '2002-06-01', 19, 1, 5),
+('TaylorContreras86', 'Taylor', 'Contreras', '$cS4Bya1', 'Northwestern', 'TaylorContreras86@Northwestern.edu', '2267857394', '2001-05-05', 18, 3, 2),
+('SheliaArmstrong94', 'Shelia', 'Armstrong', '^a9VBb4t', 'UMiami', 'SheliaArmstrong94@UMiami.edu', '822-893-9440', '2001-05-05', 30, 5, 5),
+('TammyHowell76', 'Tammy', 'Howell', 'E)uN65Nf', 'UCBerkeley', 'TammyHowell76@UCBerkeley.edu', '3115198345', '2003-05-10', 21, 2, 3),
+('FrankMorton31', 'Frank', 'Morton', 'Q_1!BgOf', 'UMiami', 'FrankMorton31@UMiami.edu', '001-634-425-4856', '2005-11-11', 30, 0, 5);
 INSERT INTO discount_used (username, discountId)
-VALUES ('MicheleKelly94', 9),
-INSERT INTO discount_used (username, discountId)
-VALUES ('JackZamora155', 5),
-INSERT INTO discount_used (username, discountId)
-VALUES ('MarkMorris26', 2),
-INSERT INTO discount_used (username, discountId)
-VALUES ('CoreyReyes197', 6),
-INSERT INTO discount_used (username, discountId)
-VALUES ('TammyAnderson146', 2),
-INSERT INTO discount_used (username, discountId)
-VALUES ('MadelineWeber92', 3),
-INSERT INTO discount_used (username, discountId)
-VALUES ('CoreyReyes197', 2),
-INSERT INTO discount_used (username, discountId)
-VALUES ('JackZamora155', 1),
-INSERT INTO discount_used (username, discountId)
-VALUES ('MarkMorris26', 4),
-INSERT INTO discount_used (username, discountId)
-VALUES ('TammyAnderson146', 3);
-INSERT INTO admin (username, firstName, lastName, password, email, phoneNo,  supportUser, supportClub, supportStore)
-VALUES('KatherineZhang47', 'Katherine', 'Zhang', '#s2qQLSs', 'KatherineZhang47@gmail.com', '+1-259-648-8472x1808', 'JeremiahDavis164', 5, 1),
-INSERT INTO admin (username, firstName, lastName, password, email, phoneNo,  supportUser, supportClub, supportStore)
-VALUES('NicoleGonzalez86', 'Nicole', 'Gonzalez', '@h1sQ7ec', 'NicoleGonzalez86@gmail.com', '618-670-7080x0235', 'TamaraMoore103', 4, 2);
+VALUES
+('FrankMorton31', 3),
+('SheliaArmstrong94', 4),
+('LoganJones71', 7),
+('TaylorContreras86', 3),
+('MeaganGay64', 3),
+('PaulJohnson36', 7),
+('KellyRobles135', 9),
+('FrankMorton31', 2),
+('TammyHowell76', 5),
+('FrankMorton31', 4);
+INSERT INTO admin (username, firstName, lastName, password, email, phoneNo, supportUser, supportClub, supportStore)
+VALUES
+('ValerieMolina53', 'Valerie', 'Molina', 'RO@C4Exa', 'ValerieMolina53@gmail.com', '718-870-6829x0832', 'KellyRobles135', 5, 4),
+('DavidZavala56', 'David', 'Zavala', 'B&5&6Qte', 'DavidZavala56@gmail.com', '+1-345-708-5215x714', 'LoganJones71', 3, 2);
