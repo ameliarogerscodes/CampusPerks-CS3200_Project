@@ -1,59 +1,49 @@
 import logging
-logger = logging.getLogger(__name__)
-
 import streamlit as st
 from modules.nav import SideBarLinks
-import requests
 
-st.set_page_config(layout = 'wide')
+# Setup
+logger = logging.getLogger(__name__)
+st.set_page_config(page_title="Admin Homepage", layout="wide")
+SideBarLinks(show_home=True)
 
-SideBarLinks()
+# Welcome header
+st.title(f"Welcome back, {st.session_state.get('first_name', 'Student')}! 🎓")
+st.subheader("Explore and bookmark discounts that match your needs.")
 
-st.title('System Admin Home Page')
-
-if st.button('Update ML Models', 
-             type='primary',
-             use_container_width=True):
-  st.switch_page('pages/21_ML_Model_Mgmt.py')
-
-
-# add window to display user interactions
-if "interaction_log" not in st.session_state:
-    st.session_state.interaction_log = []
-
-if admin_input:
-    st.session_state.interaction_log.append(admin_input)
-
-st.subheader("User Interactions")
-interaction_window = "\n".join(st.session_state.interaction_log)
-st.text_area("Interaction Window", interaction_window, height=200)
-
-# user examples:
-users = [
-    {"username": "emmafoley", "name": "Emma Foley", "email": "ef@northeastern.edu"},
-    {"username": "johnsmith", "name": "John Smith", "email": "js@example.com"},
-    {"username": "alexdoe", "name": "Alex Doe", "email": "alex@example.com"},
+# Sample discount data
+discounts = [
+    {"id": 101, "store": "Joe's Pizza", "category": "Food", "percent": 20},
+    {"id": 102, "store": "TechMart", "category": "Electronics", "percent": 15},
+    {"id": 103, "store": "FitLife Gym", "category": "Fitness", "percent": 10}
 ]
 
-# search bar to search for users in the app
-search_query = st.text_input("Search Users by username, name, or email")
+# Initialize bookmarks in session_state
+if "bookmarks" not in st.session_state:
+    st.session_state.bookmarks = []
 
-if search_query:
-    filtered_users = [
-        user for user in users
-        if search_query.lower() in user["username"].lower()
-        or search_query.lower() in user["name"].lower()
-        or search_query.lower() in user["email"].lower()
-    ]
-else:
-    filtered_users = users
+# Filter options
+category = st.selectbox("🔍 Filter by Category", options=["All", "Food", "Electronics", "Fitness"])
+filtered_discounts = [d for d in discounts if category == "All" or d["category"] == category]
 
-st.subheader("Search Results")
-if filtered_users:
-    for user in filtered_users:
-        st.markdown(f"**Username:** {user['username']}")
-        st.markdown(f"**Name:** {user['name']}")
-        st.markdown(f"**Email:** {user['email']}")
-        st.markdown("---")
+# Display available discounts
+st.markdown("### 📦 Available Discounts")
+for discount in filtered_discounts:
+    with st.expander(f"{discount['store']} — {discount['percent']}% Off ({discount['category']})"):
+        if discount["id"] in st.session_state.bookmarks:
+            st.success("✅ Already Bookmarked")
+        else:
+            if st.button(f"⭐ Bookmark this", key=discount["id"]):
+                st.session_state.bookmarks.append(discount["id"])
+                st.success("Bookmarked!")
+
+# Display bookmarked discounts
+st.markdown("---")
+st.markdown("### 📚 My Bookmarked Discounts")
+
+bookmarked_discounts = [d for d in discounts if d["id"] in st.session_state.bookmarks]
+if bookmarked_discounts:
+    for bd in bookmarked_discounts:
+        st.markdown(f"- **{bd['store']}** ({bd['percent']}% off, *{bd['category']}*)")
 else:
-    st.write("No users found.")
+    st.info("You haven't bookmarked any discounts yet.")
