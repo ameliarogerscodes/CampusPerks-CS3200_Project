@@ -2,33 +2,34 @@
 import streamlit as st
 from modules.nav import SideBarLinks
 
-st.set_page_config(page_title="My Bookmarked Discounts", layout="wide")
-SideBarLinks(show_home=True)
-
-# --- ensure sample discounts exist ---
-if "student_discounts" not in st.session_state:
-    st.error("No discount data loaded. Go to Browse first.")
+if "discounts" not in st.session_state:
+    st.error("Go to Browse first to load discounts.")
     st.stop()
-
 if "bookmarks" not in st.session_state:
     st.session_state.bookmarks = []
 
-# --- UI ---
+st.set_page_config(page_title="My Bookmarked Discounts", layout="wide")
+SideBarLinks(show_home=True)
+
 st.title("📚 My Saved Discounts")
 
-if not st.session_state.bookmarks:
-    st.info("You haven't bookmarked any discounts yet.")
-else:
-    saved = [d for d in st.session_state.student_discounts
-             if d["discountId"] in st.session_state.bookmarks]
-    st.markdown(f"### ⭐ {len(saved)} Bookmarked")
-    for d in saved:
-        did = d["discountId"]
-        with st.expander(f"{d['storeName']} — {d['percentOff']}% off {d['item']} ({d['category']})"):
-            st.write(f"**Valid until:** {d['endDate']}")
-            if st.button("🗑️ Remove Bookmark", key=f"r_{did}"):
-                st.session_state.bookmarks.remove(did)
-                st.success("Removed. Refresh to update.")
+# --- Sidebar store filter ---
+stores = sorted({d["store"] for d in st.session_state.discounts})
+choice_store = st.sidebar.selectbox("Store", ["All"] + stores)
+
+saved = [d for d in st.session_state.discounts if d["id"] in st.session_state.bookmarks]
+if choice_store != "All":
+    saved = [d for d in saved if d["store"] == choice_store]
+
+st.markdown(f"### ⭐ {len(saved)} Bookmarked")
+for d in saved:
+    with st.expander(f"{d['store']} — {d['percent']}% off {d['item']}"):
+        st.write(f"**Category:** {d['category']}")
+        st.write(f"**Expires:** {d['endDate']}")
+        key = f"rm_{d['id']}"
+        if st.button("🗑️ Remove Bookmark", key=key):
+            st.session_state.bookmarks.remove(d["id"])
+            st.success("Removed — refresh to see updates")
 
 st.markdown("---")
-st.caption("CampusPerks • Your personal savings hub.")
+st.caption("CampusPerks • Your personal deals library.")

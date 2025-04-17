@@ -4,7 +4,7 @@
 
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from backend.db_connection import db
+from api.backend import db
 
 colleges = Blueprint('colleges', __name__)
 

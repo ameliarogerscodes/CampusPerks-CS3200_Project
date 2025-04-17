@@ -4,7 +4,8 @@
 
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from backend.db_connection import db
+# from db_connection.connector import db
+from backend import db
 
 clubs = Blueprint('clubs', __name__)
 
@@ -20,7 +21,10 @@ def get_all_clubs():
     row_headers = [x[0] for x in cursor.description]
     results = cursor.fetchall()
     json_data = [dict(zip(row_headers, row)) for row in results]
-    return make_response(jsonify(json_data), 200)
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
 
 # get details for a specfic club
 @clubs.route('/clubs/<int:clubId>', methods=['GET'])
@@ -34,9 +38,12 @@ def get_club(clubId):
     '''
     cursor.execute(query, (clubId,))
     row_headers = [x[0] for x in cursor.description]
-    results = cursor.fetchall()
-    json_data = [dict(zip(row_headers, row)) for row in results]
-    return make_response(jsonify(json_data), 200)
+    theData = cursor.fetchall()
+    json_data = [dict(zip(row_headers, row)) for row in theData]
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
 
 # add a new club
 @clubs.route('/clubs', methods=['POST'])
@@ -55,7 +62,10 @@ def add_club():
     cursor = db.get_db().cursor()
     cursor.execute(query, values)
     db.get_db().commit()
-    return make_response("club added successfully", 201)
+    the_response = make_response(jsonify({'message': 'club added successfully'}))
+    the_response.status_code = 201
+    the_response.mimetype = 'application/json'
+    return the_response
 
 
 # update a club
