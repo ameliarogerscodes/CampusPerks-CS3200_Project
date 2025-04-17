@@ -5,7 +5,7 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 # from db_connection.connector import db
-from backend import db
+from db_connection import db
 
 clubs = Blueprint('clubs', __name__)
 

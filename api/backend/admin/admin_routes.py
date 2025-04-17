@@ -4,7 +4,7 @@
 
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
-from api.backend import db
+from db_connection import db
 
 admin = Blueprint('admin', __name__)
 
@@ -102,9 +102,9 @@ def update_admin():
         the_data['password'],
         the_data['email'],
         the_data['phoneNo'],
-        the_data('supportUser', False),
-        the_data('supportClub', False),
-        the_data('supportStore'), False
+        the_data.get('supportUser', False),
+        the_data.get('supportClub', False),
+        the_data.get('supportStore'), False
     )
 
     cursor = db.get_db().cursor()
