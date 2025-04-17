@@ -3,57 +3,44 @@ CREATE DATABASE campusPerks_db;
 USE campusPerks_db;
 
 DROP TABLE IF EXISTS discount_used;
-DROP TABLE IF EXISTS user_club;
-DROP TABLE IF EXISTS club_store;
-DROP TABLE IF EXISTS discount;
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS store;
+DROP TABLE IF EXISTS discount;
 DROP TABLE IF EXISTS club;
+DROP TABLE IF EXISTS store;
 DROP TABLE IF EXISTS college;
 DROP TABLE IF EXISTS location;
 
--- Location table
+-- 1. Location table
 CREATE TABLE location (
+    locationId INT PRIMARY KEY,
     streetAddress VARCHAR(100) NOT NULL,
     city VARCHAR(50) NOT NULL,
     state VARCHAR(50) NOT NULL,
     country VARCHAR(50) NOT NULL,
-    zipCode VARCHAR(20) NOT NULL,
-    PRIMARY KEY (streetAddress, city, state, country)
+    zipCode VARCHAR(20) NOT NULL
 );
 
--- College table
+-- 2. College table
 CREATE TABLE college (
     collegeName VARCHAR(100) PRIMARY KEY,
-    location VARCHAR(100) NOT NULL,
+    locationId INT NOT NULL,
     noOfStores INT DEFAULT 0,
     noOfUsers INT DEFAULT 0,
-    domain VARCHAR(50) NOT NULL
+    domain VARCHAR(50) NOT NULL,
+    FOREIGN KEY(locationId) REFERENCES location(locationId)
 );
 
--- Club table
-CREATE TABLE club (
-    clubId INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    college VARCHAR(100) NOT NULL,
-    numberOfUsers INT DEFAULT 0,
-    FOREIGN KEY (college) REFERENCES college(collegeName)
-);
-
--- Store table
+-- 3. Store table
 CREATE TABLE store (
     storeId INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    locationStreet VARCHAR(100) NOT NULL,
-    locationCity VARCHAR(50) NOT NULL,
-    locationState VARCHAR(50) NOT NULL,
-    locationCountry VARCHAR(50) NOT NULL,
+    locationId INT NOT NULL,
     priceRange VARCHAR(20) NOT NULL,
     noOfDiscounts INT DEFAULT 0,
     hoursOfOperations VARCHAR(100) NOT NULL,
     category VARCHAR(50) NOT NULL,
-    phoneNo VARCHAR(20) NOT NULL,
+    phoneNo VARCHAR(50) NOT NULL,
     website VARCHAR(100),
     starRating DECIMAL(2,1),
     delivery BOOLEAN DEFAULT FALSE,
@@ -61,18 +48,29 @@ CREATE TABLE store (
     totalSales DECIMAL(12,2) DEFAULT 0.00,
     noOfOrders INT DEFAULT 0,
     college VARCHAR(100) NOT NULL,
+    clubId INT DEFAULT NULL,
     FOREIGN KEY (college) REFERENCES college(collegeName),
-    FOREIGN KEY (locationStreet, locationCity, locationState, locationCountry)
-        REFERENCES location(streetAddress, city, state, country)
+    FOREIGN KEY (locationId) REFERENCES location(locationId)
 );
 
--- Discount table
+-- 4. Club table
+CREATE TABLE club (
+    clubId INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    college VARCHAR(100) NOT NULL,
+    storeId INT DEFAULT NULL,
+    numberOfUsers INT DEFAULT 0,
+    FOREIGN KEY (college) REFERENCES college(collegeName),
+    FOREIGN KEY (storeId) REFERENCES store(storeId)
+);
+
+-- 5. Discount table
 CREATE TABLE discount (
-    discountId INT AUTO_INCREMENT PRIMARY KEY,
+    discountId INT PRIMARY KEY NOT NULL,
     storeId INT NOT NULL,
     code VARCHAR(50) NOT NULL,
-    percentOff DECIMAL(5,2) NOT NULL,
-    item VARCHAR(100) NOT NULL,
+    percentOff INT NOT NULL,
+    item VARCHAR(100),
     startDate DATETIME NOT NULL,
     endDate DATETIME,
     ageRestricted BOOLEAN DEFAULT FALSE,
@@ -81,7 +79,7 @@ CREATE TABLE discount (
     FOREIGN KEY (storeId) REFERENCES store(storeId)
 );
 
--- User table (updated to reference clubId)
+-- 6. User table
 CREATE TABLE user (
     username VARCHAR(50) PRIMARY KEY,
     firstName VARCHAR(50) NOT NULL,
@@ -89,7 +87,7 @@ CREATE TABLE user (
     password VARCHAR(128) NOT NULL,
     college VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    phoneNo VARCHAR(20) NOT NULL,
+    phoneNo VARCHAR(50) NOT NULL,
     birthdate DATE NOT NULL,
     age INT,
     discountsUsed INT DEFAULT 0,
@@ -98,43 +96,29 @@ CREATE TABLE user (
     FOREIGN KEY (clubId) REFERENCES club(clubId)
 );
 
-
--- Admin table
+-- 7. Admin table
 CREATE TABLE admin (
     username VARCHAR(50) PRIMARY KEY,
     firstName VARCHAR(50) NOT NULL,
     lastName VARCHAR(50) NOT NULL,
     password VARCHAR(128) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
-    phoneNo VARCHAR(20) NOT NULL,
-    supportUser BOOLEAN DEFAULT FALSE,
-    supportClub BOOLEAN DEFAULT FALSE,
-    supportStore BOOLEAN DEFAULT FALSE
+    phoneNo VARCHAR(50) NOT NULL,
+    supportUser VARCHAR(50) DEFAULT NULL,
+    supportClub INT DEFAULT NULL,
+    supportStore INT DEFAULT NULL,
+    FOREIGN KEY (supportUser) REFERENCES user(username),
+    FOREIGN KEY (supportClub) REFERENCES club(clubId),
+    FOREIGN KEY (supportStore) REFERENCES store(storeId)
 );
 
--- Junction tables
-CREATE TABLE user_club (
-    username VARCHAR(50) NOT NULL,
-    clubId INT NOT NULL,
-    PRIMARY KEY (username, clubId),
-    FOREIGN KEY (username) REFERENCES user(username),
-    FOREIGN KEY (clubId) REFERENCES club(clubId)
-);
-
+-- 8. Discount Used (junction table)
 CREATE TABLE discount_used (
     username VARCHAR(50) NOT NULL,
     discountId INT NOT NULL,
     PRIMARY KEY (username, discountId),
     FOREIGN KEY (username) REFERENCES user(username),
     FOREIGN KEY (discountId) REFERENCES discount(discountId)
-);
-
-CREATE TABLE club_store (
-    clubId INT NOT NULL,
-    storeId INT NOT NULL,
-    PRIMARY KEY (clubId, storeId),
-    FOREIGN KEY (clubId) REFERENCES club(clubId),
-    FOREIGN KEY (storeId) REFERENCES store(storeId)
 );
 
 -- Indexes
@@ -144,5 +128,5 @@ CREATE INDEX idx_store_college ON store(college);
 CREATE INDEX idx_user_college ON user(college);
 CREATE INDEX idx_discount_used ON discount_used(discountId);
 CREATE INDEX idx_user_discounts ON discount_used(username);
-CREATE UNIQUE INDEX idx_store_location ON store(locationStreet, locationCity, locationState, locationCountry);
+CREATE UNIQUE INDEX idx_store_name_location ON store(name, locationId);
 CREATE UNIQUE INDEX idx_discount_code ON discount(storeId, code);

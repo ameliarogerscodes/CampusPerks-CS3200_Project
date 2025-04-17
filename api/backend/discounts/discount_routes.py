@@ -11,31 +11,6 @@ from backend.ml_models.model01 import predict
 
 discounts = Blueprint('discounts', __name__)
 
-# Get all discounts from the DB
-@discounts.route('/discounts', methods=['GET'])
-def get_discounts():
-    current_app.logger.info('GET /discounts route')
-    cursor = db.get_db().cursor()
-
-    query = '''
-        SELECT discountId, storeId, code, percentOff, item, startDate,
-               endDate, ageRestricted, minPurchase, bdayDiscount
-        FROM discount
-    '''
-    cursor.execute(query)
-
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-
 # add a new discount to the DB
 @discounts.route('/discounts', methods=['POST'])
 def add_discount():
@@ -81,29 +56,26 @@ def add_discount():
         return make_response(jsonify({'error': 'Failed to add discount'}), 500)
 
 
-# get a single discount by id
-@discounts.route('/discounts/<discountId>', methods=['GET'])
-def get_discount_by_id(discountId):
-    current_app.logger.info('GET /discounts/<discountId> route')
+@discounts.route('/discounts', methods=['GET'], endpoint='get_discounts_route')
+def get_discounts():
+    print("🔍 Flask: GET /discounts hit!")
+
     cursor = db.get_db().cursor()
 
     query = '''
         SELECT discountId, storeId, code, percentOff, item, startDate,
                endDate, ageRestricted, minPurchase, bdayDiscount
         FROM discount
-        WHERE discountId = %s
     '''
-    cursor.execute(query, (discountId,))
-
+    cursor.execute(query)
     row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+    data = cursor.fetchall()
+
+    if not data:
+        return jsonify([])  # 👈 even if empty, send a JSON list
+
+    json_data = [dict(zip(row_headers, row)) for row in data]
+    return jsonify(json_data)
 
 # update a discount by ID
 @discounts.route('/discounts/<int:discountId>', methods=['PUT'])
