@@ -88,14 +88,24 @@ docker compose up --build
 
 ## 👤 Authors
 
-- Marcus Yi (@marcusyi)
-- Team CS3200 Group 5
+- Marcus Yi
+- Molly Varrenti
+- Amelia Rogers
+- Emma Foley
 
 ---
+## 📽️ Demo Video
 
-## 📜 License
+[Watch the 6-8 minute team demo here]([https://your-demo-link.com](https://youtu.be/cAvfPbyvxkI))
 
-MIT License. Use freely with attribution.
+---
+### 🔐 Environment Variables
+
+  ```env
+  DB_USER=root
+  DB_PASSWORD=yourpassword
+  DB_HOST=db
+  DB_NAME=campusPerks_db
 
 ---
 
