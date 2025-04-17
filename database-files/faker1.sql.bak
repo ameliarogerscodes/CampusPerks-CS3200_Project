@@ -1,5 +1,4 @@
 USE campusPerks_db;
-<<<<<<< HEAD
 
 -- 1. Locations
 INSERT INTO location (streetAddress, city, state, country, zipCode) VALUES
@@ -99,7 +98,6 @@ INSERT INTO admin (
 ) VALUES
   ('MichelleGreen177','Michelle','Green','iA)69QMj','MichelleGreen177@gmail.com','(766)968-0632x7115', TRUE, FALSE, FALSE),
   ('DebbieLee17',    'Debbie',  'Lee',  'X*c9Q#x*', 'DebbieLee17@gmail.com',    TRUE, TRUE,  FALSE);
-=======
 INSERT INTO location (locationId, streetAddress, city, state, country, zipcode)
 VALUES
 (1, '15 Fruit St', 'San Francisco', 'Massachusetts', 'USA', '02110'),
@@ -168,4 +166,3 @@ INSERT INTO admin (username, firstName, lastName, password, email, phoneNo, supp
 VALUES
 ('ValerieMolina53', 'Valerie', 'Molina', 'RO@C4Exa', 'ValerieMolina53@gmail.com', '718-870-6829x0832', 'KellyRobles135', 5, 4),
 ('DavidZavala56', 'David', 'Zavala', 'B&5&6Qte', 'DavidZavala56@gmail.com', '+1-345-708-5215x714', 'LoganJones71', 3, 2);
->>>>>>> bd51fe0369dcdeda42cbdacac098b25074b5208a
