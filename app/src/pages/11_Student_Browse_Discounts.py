@@ -1,37 +1,44 @@
+# pages/11_Student_Browse_Discounts.py
 import streamlit as st
 from modules.nav import SideBarLinks
-
-if "student_discounts" not in st.session_state:
-    st.session_state.student_discounts = [
-        {"id": 101, "store": "Cafe 123",     "item": "Coffee",   "percent": 15, "category": "Food"},
-        {"id": 102, "store": "Book Nook",    "item": "Notebook", "percent": 20, "category": "Books"},
-        {"id": 103, "store": "Tech Hub",     "item": "USB Drive","percent": 10, "category": "Tech"},
-        {"id": 104, "store": "Style Corner", "item": "T-Shirt",  "percent": 25, "category": "Clothing"},
-        {"id": 105, "store": "Fit Studio",   "item": "Yoga Mat", "percent": 30, "category": "Fitness"},
-    ]
 
 st.set_page_config(page_title="Browse Discounts", layout="wide")
 SideBarLinks(show_home=True)
 
-st.title("🔍 Browse Student Discounts")
+# --- sample data ---
+if "student_discounts" not in st.session_state:
+    st.session_state.student_discounts = [
+        {"discountId": 1, "storeName": "Cafe 123",    "item": "Coffee",    "percentOff": 15, "category": "Food",     "endDate": "2025-04-30"},
+        {"discountId": 2, "storeName": "Uni Books",    "item": "Textbook",  "percentOff": 25, "category": "Books",    "endDate": "2025-05-05"},
+        {"discountId": 3, "storeName": "Tech Store",   "item": "USB Drive", "percentOff": 20, "category": "Tech",     "endDate": "2025-04-25"},
+        {"discountId": 4, "storeName": "Cloth Corner", "item": "Jeans",     "percentOff": 30, "category": "Clothing", "endDate": "2025-04-28"},
+    ]
 
-all_cats = ["All"] + sorted({d["category"] for d in st.session_state.student_discounts})
-choice = st.selectbox("Category", all_cats)
+# --- bookmarks storage ---
+if "bookmarks" not in st.session_state:
+    st.session_state.bookmarks = []
 
-if choice == "All":
-    filtered = st.session_state.student_discounts
-else:
-    filtered = [d for d in st.session_state.student_discounts if d["category"] == choice]
+# --- UI ---
+st.title("🔍 Find the Best Student Discounts")
+
+all_ds = st.session_state.student_discounts
+cats = ["All"] + sorted({d["category"] for d in all_ds})
+choice = st.selectbox("Filter by Category", cats)
+
+filtered = all_ds if choice == "All" else [d for d in all_ds if d["category"] == choice]
 
 st.markdown(f"### 🎯 {len(filtered)} Discounts Found")
-if filtered:
-    for d in filtered:
-        with st.expander(f"{d['store']} — {d['percent']}% off {d['item']} ({d['category']})"):
-            st.write(f"**Store:** {d['store']}")
-            st.write(f"**Item:** {d['item']}")
-            st.write(f"**Discount:** {d['percent']}%")
-else:
-    st.info("No discounts match this category.")
+
+for d in filtered:
+    did = d["discountId"]
+    with st.expander(f"{d['storeName']} — {d['percentOff']}% off {d['item']} ({d['category']})"):
+        st.write(f"**Valid until:** {d['endDate']}")
+        if did in st.session_state.bookmarks:
+            st.success("✅ Bookmarked")
+        else:
+            if st.button("⭐ Bookmark this", key=f"b_{did}"):
+                st.session_state.bookmarks.append(did)
+                st.success("Saved!")
 
 st.markdown("---")
-st.caption("CampusPerks • Helping students save smarter")
+st.caption("CampusPerks • Helping students save smarter.")
