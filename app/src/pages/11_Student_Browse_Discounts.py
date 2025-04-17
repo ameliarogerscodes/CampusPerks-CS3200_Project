@@ -1,45 +1,37 @@
 import streamlit as st
-import requests
+from modules.nav import SideBarLinks
+
+if "student_discounts" not in st.session_state:
+    st.session_state.student_discounts = [
+        {"id": 101, "store": "Cafe 123",     "item": "Coffee",   "percent": 15, "category": "Food"},
+        {"id": 102, "store": "Book Nook",    "item": "Notebook", "percent": 20, "category": "Books"},
+        {"id": 103, "store": "Tech Hub",     "item": "USB Drive","percent": 10, "category": "Tech"},
+        {"id": 104, "store": "Style Corner", "item": "T-Shirt",  "percent": 25, "category": "Clothing"},
+        {"id": 105, "store": "Fit Studio",   "item": "Yoga Mat", "percent": 30, "category": "Fitness"},
+    ]
 
 st.set_page_config(page_title="Browse Discounts", layout="wide")
-st.title("🔍 Find the Best Student Discounts")
+SideBarLinks(show_home=True)
 
-# --- Sidebar Filters ---
-st.sidebar.header("🎛️ Filter Discounts")
-category = st.sidebar.selectbox("Category", ["All", "Food", "Clothing", "Books", "Tech"])
-location = st.sidebar.text_input("City (e.g., Boston)", value="Boston")
-sort_option = st.sidebar.radio("Sort by", ["Highest % Off", "Newest First"])
+st.title("🔍 Browse Student Discounts")
 
-# --- API Call Setup ---
-params = {}
-if category != "All":
-    params["category"] = category
-if location:
-    params["location"] = location
+all_cats = ["All"] + sorted({d["category"] for d in st.session_state.student_discounts})
+choice = st.selectbox("Category", all_cats)
 
-api_url = "http://localhost:5000/api/discounts"
-response = requests.get(api_url, params=params)
-
-if response.status_code == 200:
-    discounts = response.json()
-
-    if sort_option == "Highest % Off":
-        discounts = sorted(discounts, key=lambda d: d["percentOff"], reverse=True)
-    elif sort_option == "Newest First":
-        discounts = sorted(discounts, key=lambda d: d.get("startDate", ""), reverse=True)
-
-    # --- Display Results ---
-    st.subheader(f"🎯 {len(discounts)} Matching Discounts")
-    for disc in discounts:
-        st.markdown(f"""
-        #### 🏪 {disc['storeName']}
-        - **Item:** {disc['item']}
-        - **Discount:** {disc['percentOff']}%
-        - **Valid until:** {disc['endDate']}
-        """)
+if choice == "All":
+    filtered = st.session_state.student_discounts
 else:
-    st.error("Failed to load discounts. Please try again later.")
+    filtered = [d for d in st.session_state.student_discounts if d["category"] == choice]
 
-# Footer
+st.markdown(f"### 🎯 {len(filtered)} Discounts Found")
+if filtered:
+    for d in filtered:
+        with st.expander(f"{d['store']} — {d['percent']}% off {d['item']} ({d['category']})"):
+            st.write(f"**Store:** {d['store']}")
+            st.write(f"**Item:** {d['item']}")
+            st.write(f"**Discount:** {d['percent']}%")
+else:
+    st.info("No discounts match this category.")
+
 st.markdown("---")
-st.caption("CampusPerks • Helping students save smarter.")
+st.caption("CampusPerks • Helping students save smarter")

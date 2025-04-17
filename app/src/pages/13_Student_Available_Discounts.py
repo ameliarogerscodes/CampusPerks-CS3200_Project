@@ -1,52 +1,37 @@
 import streamlit as st
-import requests
-from datetime import datetime, timedelta
+from modules.nav import SideBarLinks
 
-st.set_page_config(page_title="Discounts Ending Soon", layout="wide")
+# Sample expiring‐soon discounts (days_left ≤ 7)
+if "student_discounts" not in st.session_state:
+    st.session_state.student_discounts = [
+        {"id": 101, "store": "Cafe 123",   "item": "Coffee",    "percent": 15, "days_left": 3},
+        {"id": 102, "store": "Book Nook",  "item": "Notebook",  "percent": 20, "days_left": 10},
+        {"id": 103, "store": "Tech Hub",   "item": "USB Drive", "percent": 10, "days_left": 5},
+        {"id": 104, "store": "Style Corner","item": "T-Shirt",   "percent": 25, "days_left": 2},
+        {"id": 105, "store": "Fit Studio", "item": "Yoga Mat",  "percent": 30, "days_left": 8},
+    ]
+
+st.set_page_config(page_title="Expiring Soon", layout="wide")
+SideBarLinks(show_home=True)
+
 st.title("⏳ Discounts Expiring Soon")
 
-# Fetch all available discounts
-try:
-    response = requests.get("http://localhost:5000/api/discounts")
-    response.raise_for_status()
-    discounts = response.json()
-except Exception as e:
-    st.error("⚠️ Could not load discounts from the server.")
-    discounts = []
-    st.stop()
+# Filter to those expiring in 7 days or less
+soon = sorted(
+    [d for d in st.session_state.student_discounts if d["days_left"] <= 7],
+    key=lambda x: x["days_left"]
+)
 
-# Filter and sort by expiration date
-soon_threshold = datetime.today() + timedelta(days=7)
-
-def parse_date(date_str):
-    try:
-        return datetime.strptime(date_str, "%Y-%m-%d")
-    except:
-        return datetime.max  # If no date or error
-
-discounts_with_dates = [
-    d for d in discounts if "endDate" in d and parse_date(d["endDate"]) < soon_threshold
-]
-discounts_with_dates.sort(key=lambda d: parse_date(d["endDate"]))
-
-# Display results
-if discounts_with_dates:
-    st.markdown(f"### 🔔 {len(discounts_with_dates)} Discount(s) Expiring Soon")
-    for d in discounts_with_dates:
-        store = d.get("storeName", "Unknown Store")
-        item = d.get("item", "Item")
-        percent = d.get("percentOff", "N/A")
-        end_date = d.get("endDate", "Unknown")
-
-        st.markdown(f"""
-        #### 🏪 {store}
-        - **Item:** {item}
-        - **Discount:** {percent}% off
-        - **Expires on:** `{end_date}`
-        """)
+st.markdown(f"### 🔔 {len(soon)} Discount(s) Expiring Soon")
+if soon:
+    for d in soon:
+        with st.expander(f"{d['store']} — {d['percent']}% off {d['item']} (in {d['days_left']} days)"):
+            st.write(f"**Store:** {d['store']}")
+            st.write(f"**Item:** {d['item']}")
+            st.write(f"**Discount:** {d['percent']}%")
+            st.write(f"**Expires in:** {d['days_left']} day(s)")
 else:
-    st.info("No discounts are expiring soon. Check back later!")
+    st.info("Nothing is expiring within the next week.")
 
-# Footer
 st.markdown("---")
-st.caption("CampusPerks • Stay ahead and save before it's too late.")
+st.caption("CampusPerks • Stay ahead and save before it's too late")
