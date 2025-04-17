@@ -74,11 +74,13 @@ with tab1:
 
 # --- Tab 2: Search Users ---
 with tab2:
-    st.caption("Search and update individual user profiles.")
+    st.caption("Search, edit, or delete user profiles.")
     selected_user = st.text_input("🔍 Enter username to search", "").strip()
 
     if selected_user:
-        user = user_profiles.get(selected_user.lower())
+        user_key = selected_user.lower()
+        user = user_profiles.get(user_key)
+
         if user:
             st.success(f"User '{selected_user}' found!")
 
@@ -89,15 +91,21 @@ with tab2:
             college = st.text_input("College", value=user["college"])
             club = st.text_input("Club", value=user["club"])
 
-            if st.button("💾 Save Changes"):
-                user_profiles[selected_user.lower()] = {
-                    "first_name": first,
-                    "last_name": last,
-                    "email": email,
-                    "college": college,
-                    "club": club,
-                }
-                st.success("✅ User profile updated.")
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("💾 Save Changes"):
+                    user_profiles[user_key] = {
+                        "first_name": first,
+                        "last_name": last,
+                        "email": email,
+                        "college": college,
+                        "club": club,
+                    }
+                    st.success("✅ User profile updated.")
+            with col2:
+                if st.button("🗑️ Delete User", type="primary"):
+                    del user_profiles[user_key]
+                    st.warning(f"🚨 User '{selected_user}' deleted.")
         else:
             st.warning("🚫 No user found with that username.")
 
