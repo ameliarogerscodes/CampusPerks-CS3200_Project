@@ -1,39 +1,38 @@
 import streamlit as st
-import requests
+from modules.nav import SideBarLinks
 
-st.set_page_config(page_title="My Bookmarked Discounts", layout="wide")
-st.title("📚 My Saved Discounts")
+# Ensure we have discounts and bookmarks in session
+if "student_discounts" not in st.session_state:
+    st.session_state.student_discounts = [
+        {"id": 101, "store": "Cafe 123",     "item": "Coffee",   "percent": 15, "category": "Food"},
+        {"id": 102, "store": "Book Nook",    "item": "Notebook", "percent": 20, "category": "Books"},
+        {"id": 103, "store": "Tech Hub",     "item": "USB Drive","percent": 10, "category": "Tech"},
+        {"id": 104, "store": "Style Corner", "item": "T-Shirt",  "percent": 25, "category": "Clothing"},
+        {"id": 105, "store": "Fit Studio",   "item": "Yoga Mat", "percent": 30, "category": "Fitness"},
+    ]
+if "bookmarks" not in st.session_state:
+    st.session_state.bookmarks = []
 
-# Grab username from session
-username = st.session_state.get("username", "guest_user")
+st.set_page_config(page_title="My Bookmarks", layout="wide")
+SideBarLinks(show_home=True)
 
-# Fetch saved discounts from the backend
-api_url = f"http://localhost:5000/api/savedDiscounts/{username}"
+st.title("📚 My Bookmarked Discounts")
 
-try:
-    response = requests.get(api_url)
-    response.raise_for_status()
-    saved_discounts = response.json()
-except Exception as e:
-    st.error("⚠️ Unable to load your saved discounts.")
-    saved_discounts = []
-    st.stop()
+# Build list of bookmarked discount records
+booked = [d for d in st.session_state.student_discounts if d["id"] in st.session_state.bookmarks]
 
-# Display saved discounts
-if saved_discounts:
-    st.markdown("### ⭐ Bookmarked Discounts")
-    for disc in saved_discounts:
-        with st.expander(f"{disc['storeName']} — {disc['percentOff']}% off {disc['item']}"):
-            st.write(f"**Category:** {disc.get('category', 'N/A')}")
-            st.write(f"**Valid until:** {disc.get('endDate', 'Unknown')}")
-            st.write(f"**Code:** {disc.get('code', 'N/A')}")
-
-            if st.button(f"🗑️ Remove Bookmark", key=f"remove_{disc['discountId']}"):
-                delete_url = f"http://localhost:5000/api/savedDiscounts/{username}/{disc['discountId']}"
-                del_response = requests.delete(delete_url)
-                if del_response.status_code == 200:
-                    st.success("Bookmark removed. Refresh the page to update.")
-                else:
-                    st.error("Could not remove bookmark. Try again.")
+st.markdown(f"### ⭐ {len(booked)} Saved Discounts")
+if booked:
+    for d in booked:
+        with st.expander(f"{d['store']} — {d['percent']}% off {d['item']} ({d['category']})"):
+            st.write(f"**Store:** {d['store']}")
+            st.write(f"**Item:** {d['item']}")
+            st.write(f"**Discount:** {d['percent']}%")
+            if st.button("🗑️ Remove Bookmark", key=f"rm_{d['id']}"):
+                st.session_state.bookmarks.remove(d["id"])
+                st.success("Removed! (refresh page)")
 else:
     st.info("You haven't bookmarked any discounts yet.")
+
+st.markdown("---")
+st.caption("CampusPerks • Your personal savings list")
