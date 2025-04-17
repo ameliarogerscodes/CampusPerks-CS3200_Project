@@ -96,7 +96,7 @@ docker compose up --build
 ---
 ## 📽️ Demo Video
 
-[Watch the 6-8 minute team demo here]([https://your-demo-link.com](https://youtu.be/cAvfPbyvxkI))
+Link: https://youtu.be/cAvfPbyvxkI
 
 ---
 ### 🔐 Environment Variables
