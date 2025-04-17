@@ -1,35 +1,40 @@
-# pages/13_Student_Available_Discounts.py
 import streamlit as st
-from modules.nav import SideBarLinks
 from datetime import datetime, timedelta
-
-if "discounts" not in st.session_state:
-    st.error("Go to Browse first to load discounts.")
-    st.stop()
+from modules.nav import SideBarLinks
 
 st.set_page_config(page_title="Expiring Soon", layout="wide")
 SideBarLinks(show_home=True)
 
-st.title("⏳ Discounts Expiring Soon")
-
-# parse helper
-def parse_date(s):
-    try: return datetime.strptime(s, "%Y-%m-%d")
-    except: return datetime.max
-
+deals = st.session_state.get("student_discounts", [])
 threshold = datetime.today() + timedelta(days=7)
-soon = [d for d in st.session_state.discounts if parse_date(d["endDate"]) < threshold]
 
-# sidebar store filter
-stores = sorted({d["store"] for d in soon})
-choice_store = st.sidebar.selectbox("Store", ["All"] + stores)
+def as_dt(s):
+    try:
+        return datetime.fromisoformat(s)
+    except:
+        return datetime.max
 
-if choice_store != "All":
-    soon = [d for d in soon if d["store"] == choice_store]
+expiring = [d for d in deals if as_dt(d["end"]) <= threshold]
+expiring.sort(key=lambda d: as_dt(d["end"]))
 
-st.markdown(f"### 🔔 {len(soon)} Expiring Within 7 Days")
-for d in sorted(soon, key=lambda x: parse_date(x["endDate"])):
-    st.markdown(f"**{d['store']}** — {d['percent']}% off {d['item']} (expires {d['endDate']})")
+if "bookmarks" not in st.session_state:
+    st.session_state.bookmarks = []
+
+st.title("⏳ Deals Expiring Soon")
+
+if not expiring:
+    st.info("No upcoming expirations in the next 7 days.")
+else:
+    st.markdown(f"### 🔔 {len(expiring)} Deals Ending Soon")
+    for d in expiring:
+        key = f"ex_{d['id']}"
+        with st.expander(f"{d['store']} — {d['percent']}% off {d['item']} (ends {d['end']})"):
+            if d["id"] in st.session_state.bookmarks:
+                st.success("✅ Already Bookmarked")
+            else:
+                if st.button("⭐ Bookmark", key=key):
+                    st.session_state.bookmarks.append(d["id"])
+                    st.success("Saved!")
 
 st.markdown("---")
-st.caption("CampusPerks • Grab them before they’re gone.")
+st.caption("CampusPerks • Stay ahead and save before it's too late.")
