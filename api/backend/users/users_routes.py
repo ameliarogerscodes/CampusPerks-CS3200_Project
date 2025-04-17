@@ -5,22 +5,21 @@
 from flask import Blueprint, request, jsonify, make_response, current_app
 import json
 from db_connection import db
-#from backend.ml_models.model01 import predict
 
 users = Blueprint('users', __name__)
 
-# @users.route('/prediction/<var01>/<var02>', methods=['GET'])
-# def predict_value(var01, var02):
-#     current_app.logger.info(f'var01 = {var01}')
-#     current_app.logger.info(f'var02 = {var02}')
+@users.route('/prediction/<var01>/<var02>', methods=['GET'])
+def predict_value(var01, var02):
+    current_app.logger.info(f'var01 = {var01}')
+    current_app.logger.info(f'var02 = {var02}')
 
-#     returnVal = predict(var01, var02)
-#     return_dict = {'result': returnVal}
+    returnVal = predict(var01, var02)
+    return_dict = {'result': returnVal}
 
-#     the_response = make_response(jsonify(return_dict))
-#     the_response.status_code = 200
-#     the_response.mimetype = 'application/json'
-#     return the_response
+    the_response = make_response(jsonify(return_dict))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
 
 
 
