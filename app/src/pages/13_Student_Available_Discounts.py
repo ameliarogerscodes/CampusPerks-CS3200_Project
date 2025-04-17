@@ -18,9 +18,11 @@ st.title("⏳ Discounts Expiring Soon")
 
 # Filter to those expiring in 7 days or less
 soon = sorted(
-    [d for d in st.session_state.student_discounts if d["days_left"] <= 7],
+    [d for d in st.session_state.student_discounts if "days_left" in d and d["days_left"] <= 7],
     key=lambda x: x["days_left"]
 )
+
+
 
 st.markdown(f"### 🔔 {len(soon)} Discount(s) Expiring Soon")
 if soon:
